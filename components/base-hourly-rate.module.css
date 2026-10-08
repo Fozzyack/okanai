@@ -1,0 +1,6 @@
+.label { display: block; margin-top: 30px; font-size: 12px; font-weight: 600; }
+.payInput { display: flex; align-items: center; gap: 12px; margin-top: 12px; border: 1px solid #182b5125; border-radius: 20px; padding: 20px; background: #fffaf8; }
+.payInput:focus-within { border-color: #315de8; box-shadow: 0 0 0 3px #315de81a; }
+.payInput > span:first-child { font-size: 32px; color: #65718a; }
+.payInput > span:last-child { flex-shrink: 0; color: #65718a; font-size: 11px; }
+.payInput input { width: 100%; min-width: 0; background: transparent; border: none; font-size: clamp(2rem, 4vw, 3rem); font-weight: 600; letter-spacing: -.05em; outline: none; }

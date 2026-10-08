@@ -1,0 +1,29 @@
+.label { display: block; margin-top: 30px; font-size: 12px; font-weight: 600; }
+.timeFields { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.timeFields > div { min-width: 0; }
+.timeDisplay { margin: 8px 0 12px; font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 600; letter-spacing: -.055em; white-space: nowrap; }
+.timeDisplay span { font-size: 13px; letter-spacing: 0; color: #315de8; background: #edf2ff; border-radius: 8px; padding: 5px 7px; vertical-align: middle; }
+.timeFields input { width: 100%; border: 1px solid #182b5120; border-radius: 12px; padding: 10px; background: #fffaf8; font-size: 13px; color: #182b51; }
+.timeFields small { display: block; font-size: 10px; margin-top: 6px; color: #65718a; }
+.rangeArea { position: relative; height: 44px; margin: 32px 14px 0; }
+.rail { position: absolute; left: 0; right: 0; top: 18px; height: 8px; background: #e8edf7; border-radius: 8px; overflow: hidden; }
+.rail span { position: absolute; height: 100%; background: #315de8; border-radius: inherit; }
+.range { appearance: none; -webkit-appearance: none; pointer-events: none; position: absolute; inset: 0; width: calc(100% + 28px); height: 44px; margin: 0 -14px; background: transparent; }
+.range::-webkit-slider-runnable-track { height: 8px; background: transparent; }
+.range::-moz-range-track { height: 8px; background: transparent; }
+.range::-webkit-slider-thumb { appearance: none; -webkit-appearance: none; pointer-events: auto; width: 28px; height: 28px; margin-top: -10px; border: 5px solid white; border-radius: 50%; background: #315de8; box-shadow: 0 2px 12px #182b5133; cursor: ew-resize; }
+.range::-moz-range-thumb { pointer-events: auto; width: 18px; height: 18px; border: 5px solid white; border-radius: 50%; background: #315de8; box-shadow: 0 2px 12px #182b5133; cursor: ew-resize; }
+.range:focus-visible { outline: none; z-index: 2; }
+.range:focus-visible::-webkit-slider-thumb { outline: 3px solid #315de8; outline-offset: 3px; }
+.range:focus-visible::-moz-range-thumb { outline: 3px solid #315de8; outline-offset: 3px; }
+.ticks { display: flex; justify-content: space-between; font-size: 9px; color: #65718a; }
+.duration { margin-top: 24px; text-align: center; color: #65718a; font-size: 13px; }
+.holiday { margin-top: 20px; font-size: 12px; }
+.holiday label { display: flex; align-items: center; gap: 10px; font-weight: 600; cursor: pointer; }
+.holiday input { width: 16px; height: 16px; accent-color: #315de8; }
+.holiday p { margin: 6px 0 0 26px; font-size: 11px; color: #65718a; }
+@media (max-width: 480px) {
+    .timeFields { gap: 12px; }
+    .timeDisplay { font-size: 1.8rem; }
+    .timeDisplay span { font-size: 11px; padding: 4px; }
+}
