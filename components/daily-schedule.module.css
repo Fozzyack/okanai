@@ -20,10 +20,17 @@
 .range:focus-visible::-moz-range-thumb { outline: 3px solid #315de8; outline-offset: 3px; }
 .ticks { display: flex; justify-content: space-between; font-size: 9px; color: #65718a; }
 .duration { width: fit-content; margin: 24px auto 0; padding: 8px 14px; border: 1px solid #315de814; border-radius: 30px; background: #edf2ff99; text-align: center; color: #52617e; font-size: 13px; font-variant-numeric: tabular-nums; }
-.holiday { margin-top: 20px; font-size: 12px; }
-.holiday label { display: flex; align-items: center; gap: 10px; width: fit-content; min-height: 44px; font-weight: 600; cursor: pointer; }
-.holiday input { width: 16px; height: 16px; accent-color: #315de8; }
+.holiday { display: flex; align-items: center; gap: 6px; margin-top: 20px; font-size: 13px; color: #52617e; }
+.holiday label { display: flex; align-items: center; gap: 10px; width: fit-content; min-height: 44px; font-weight: 600; cursor: pointer; transition: color .18s ease; }
+.holiday label:hover, .holiday label:has(input:checked) { color: #315de8; }
+.holiday input { width: 18px; height: 18px; margin: 0; accent-color: #315de8; cursor: pointer; }
 .holiday input:focus-visible { outline: 2px solid #315de8; outline-offset: 3px; }
+.holidayHint { position: relative; display: inline-flex; }
+.holidayInfo { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 44px; padding: 0; border: 0; background: transparent; color: #8492ad; cursor: pointer; transition: color .18s ease; }
+.holidayInfo:hover, .holidayInfo:focus-visible { color: #315de8; }
+.holidayInfo:focus-visible { outline: 2px solid #315de8; outline-offset: 2px; border-radius: 8px; }
+.holidayTooltip { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); z-index: 3; width: max-content; padding: 9px 13px; border-radius: 10px; background: #182b51; color: #fff; font-size: 12px; font-weight: 600; box-shadow: 0 6px 18px #182b5126; }
+.holidayTooltip::after { content: ""; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 5px solid transparent; border-top-color: #182b51; }
 .recap { margin: 0; text-align: center; font-size: 13px; color: #52617e; }
 @media (max-width: 480px) {
     .timeFields { gap: 12px; }

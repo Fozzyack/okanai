@@ -1,5 +1,6 @@
 "use client";
 
+import { useId, useState } from "react";
 import {
     clockInput,
     formatTime,
@@ -26,6 +27,9 @@ export default function DailySchedule({
     onTimeChange,
     onHolidayChange,
 }: DailyScheduleProps) {
+    const holidayTipId = useId();
+    const [holidayTipOpen, setHolidayTipOpen] = useState(false);
+
     return (
         <>
             <div className={styles.timeFields}>
@@ -125,8 +129,37 @@ export default function DailySchedule({
                             onHolidayChange(event.target.checked)
                         }
                     />
-                    Is public holiday
+                    Public holiday
                 </label>
+                <span
+                    className={styles.holidayHint}
+                    onPointerEnter={() => setHolidayTipOpen(true)}
+                    onPointerLeave={() => setHolidayTipOpen(false)}
+                >
+                    <button
+                        type="button"
+                        className={styles.holidayInfo}
+                        aria-label="Public holiday pay rate"
+                        aria-describedby={holidayTipOpen ? holidayTipId : undefined}
+                        onFocus={() => setHolidayTipOpen(true)}
+                        onBlur={() => setHolidayTipOpen(false)}
+                        onClick={() => setHolidayTipOpen(true)}
+                        onKeyDown={(event) => {
+                            if (event.key === "Escape") setHolidayTipOpen(false);
+                        }}
+                    >
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.7" />
+                            <path d="M12 11v6" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+                            <circle cx="12" cy="7.5" r="1" fill="currentColor" />
+                        </svg>
+                    </button>
+                    {holidayTipOpen && (
+                        <span id={holidayTipId} role="tooltip" className={styles.holidayTooltip}>
+                            2x base pay!!!
+                        </span>
+                    )}
+                </span>
             </div>
         </>
     );

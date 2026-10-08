@@ -70,7 +70,7 @@ export default function CalculatorHelp() {
                             <li>
                                 For each day, drag the blue clock-in and
                                 clock-out handles. You can also use arrow keys or
-                                enter times directly. Check Is public holiday if it
+                                enter times directly. Check Public holiday if it
                                 applies to that day. Choose Next: unpaid break
                                 to open the separate break step without saving.
                             </li>
@@ -108,7 +108,7 @@ export default function CalculatorHelp() {
                     <section>
                         <h3>Public holidays</h3>
                         <p>
-                            Check Is public holiday for a day to pay all paid
+                            Check Public holiday for a day to pay all paid
                             hours at 2× your base rate. Public holidays override
                             weekday and weekend tiers, and all paid hours appear
                             as overtime in the breakdown. Multipliers do not stack.
