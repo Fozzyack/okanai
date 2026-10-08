@@ -81,11 +81,6 @@ export default function Home() {
                     className="grid items-center gap-8 py-14 lg:min-h-[650px] lg:grid-cols-[1.05fr_1fr] lg:gap-10 lg:py-20"
                 >
                     <div className="relative z-10">
-                        <div
-                            data-hero-reveal
-                            className="mb-7 inline-flex items-center gap-2.5 rounded-full border border-[#315de8]/15 bg-[#edf2ff] px-3.5 py-2 text-[11px] font-semibold tracking-[1.5px] text-[#315de8]"
-                        >
-                        </div>
                         <h1
                             data-hero-reveal
                             id="hero-heading"
