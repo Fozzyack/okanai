@@ -30,7 +30,7 @@ export default function DailySchedule({
         <>
             <div className={styles.timeFields}>
                 {(["start", "end"] as const).map((key) => (
-                    <div key={key}>
+                    <div key={key} data-calculator-reveal>
                         <label htmlFor={`${key}-time`} className={styles.label}>
                             {key === "start" ? "Clock in" : "Clock out"}
                         </label>
@@ -112,10 +112,10 @@ export default function DailySchedule({
                 <span>6 PM</span>
                 <span>12 AM</span>
             </div>
-            <p className={styles.duration}>
+            <p className={styles.duration} data-calculator-reveal>
                 {error ? "Check your times" : `${hours} hours worked`}
             </p>
-            <div className={styles.holiday}>
+            <div className={styles.holiday} data-calculator-reveal>
                 <label htmlFor="public-holiday">
                     <input
                         id="public-holiday"

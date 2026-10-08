@@ -14,7 +14,7 @@ export default function BaseHourlyRate({
     onChange,
 }: BaseHourlyRateProps) {
     return (
-        <>
+        <div data-calculator-reveal>
             <label htmlFor="base-pay" className={styles.label}>
                 Base hourly pay (AUD)
             </label>
@@ -34,6 +34,6 @@ export default function BaseHourlyRate({
                 />
                 <span>AUD / hr</span>
             </div>
-        </>
+        </div>
     );
 }

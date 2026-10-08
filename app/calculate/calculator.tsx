@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import { gsap } from "gsap";
+import { useGSAP } from "@gsap/react";
 import BaseHourlyRate from "@/components/base-hourly-rate";
 import DailySchedule from "@/components/daily-schedule";
 import {
@@ -18,6 +20,8 @@ import {
 } from "@/lib/payroll";
 import styles from "./calculator.module.css";
 
+gsap.registerPlugin(useGSAP);
+
 export default function Calculator() {
     const [step, setStep] = useState(0);
     const [pay, setPay] = useState("25");
@@ -25,8 +29,33 @@ export default function Calculator() {
     const { shifts } = weekForm;
     const [error, setError] = useState("");
     const [announcement, setAnnouncement] = useState("");
+    const root = useRef<HTMLDivElement>(null);
     const heading = useRef<HTMLHeadingElement>(null);
     const initial = useRef(true);
+    useGSAP(
+        () => {
+            const media = gsap.matchMedia();
+            media.add(
+                "(prefers-reduced-motion: no-preference)",
+                () => {
+                    // Only reveal the field cards, never the interactive range rail.
+                    gsap.from("[data-calculator-reveal]", {
+                        y: 14,
+                        opacity: 0,
+                        duration: 0.45,
+                        stagger: 0.045,
+                        ease: "power2.out",
+                        clearProps: "transform,opacity",
+                    });
+                },
+                root,
+            );
+
+            return () => media.revert();
+        },
+        { scope: root, dependencies: [step], revertOnUpdate: true },
+    );
+
     useEffect(() => {
         if (initial.current) {
             initial.current = false;
@@ -96,13 +125,14 @@ export default function Calculator() {
     }
 
     return (
-        <div className={styles.wizard}>
+        <div ref={root} className={styles.wizard}>
             <section className={styles.card} aria-labelledby="step-title">
                 <h1
                     id="step-title"
                     ref={heading}
                     tabIndex={-1}
                     className={styles.title}
+                    data-calculator-reveal
                 >
                     {step === 0 ? (
                         <>
@@ -162,7 +192,7 @@ export default function Calculator() {
                         >
                             {error || (step > 0 ? shiftError : "")}
                         </p>
-                        <div className={styles.actions}>
+                        <div className={styles.actions} data-calculator-reveal>
                             {step > 0 && (
                                 <button
                                     type="button"
@@ -185,6 +215,7 @@ export default function Calculator() {
                             <button
                                 type="button"
                                 className={styles.skip}
+                                data-calculator-reveal
                                 onClick={() => complete("skipped")}
                             >
                                 Didn’t work {days[step - 1]}? Skip this day →
@@ -193,14 +224,14 @@ export default function Calculator() {
                     </form>
                 ) : (
                     <>
-                        <p className={styles.description}>
+                        <p className={styles.description} data-calculator-reveal>
                             Estimated gross pay, before tax and deductions.
                         </p>
-                        <div className={styles.total}>
+                        <div className={styles.total} data-calculator-reveal>
                             {weekly ? money(weekly.gross) : "—"}
                             <span>AUD · {weekly?.hours ?? 0} hours</span>
                         </div>
-                        <dl className={styles.breakdown}>
+                        <dl className={styles.breakdown} data-calculator-reveal>
                             <div>
                                 <dt>
                                     Regular{" "}
@@ -229,7 +260,11 @@ export default function Calculator() {
                         </dl>
                         <div className={styles.dailyRows}>
                             {days.map((day, index) => (
-                                <div key={day} className={styles.dailyRow}>
+                                <div
+                                    key={day}
+                                    className={styles.dailyRow}
+                                    data-calculator-reveal
+                                >
                                     <div>
                                         <strong>{day}</strong>
                                         <small>
@@ -264,7 +299,7 @@ export default function Calculator() {
                                 </div>
                             ))}
                         </div>
-                        <div className={styles.actions}>
+                        <div className={styles.actions} data-calculator-reveal>
                             <button
                                 className={styles.secondary}
                                 onClick={() => go(7)}
@@ -280,6 +315,7 @@ export default function Calculator() {
                         </div>
                         <button
                             className={styles.skip}
+                            data-calculator-reveal
                             onClick={() => {
                                 setPay("25");
                                 setWeekForm(freshWeek());
