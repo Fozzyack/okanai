@@ -35,11 +35,11 @@ Details, including each day's break, are held only in React browser memory and r
 
 ### Estimate rules
 
-| Day | Pay tiers |
-| --- | --- |
-| Monday–Friday | First 8 hours at 1× base rate; next 2 at 1.5×; remaining hours at 2× |
+| Day                 | Pay tiers                                                                |
+| ------------------- | ------------------------------------------------------------------------ |
+| Monday–Friday       | First 8 hours at 1× base rate; next 2 at 1.5×; remaining hours at 2×     |
 | Saturday and Sunday | First 3 hours at 1.5×; remaining hours at 2×; all classified as overtime |
-| Public holiday | All hours at 2×, classified as overtime; overrides weekday/weekend tiers |
+| Public holiday      | All hours at 2×, classified as overtime; overrides weekday/weekend tiers |
 
 Multipliers do not stack, and there is no weekly overtime threshold. For example, a 10-hour Monday at $25/hour yields $275 AUD: 8 × $25 plus 2 × $37.50.
 
@@ -51,12 +51,12 @@ The landing-page card displays a fixed, illustrative **$1,632.35 AUD**. It is no
 
 ## Commands
 
-| Command | Purpose |
-| --- | --- |
-| `bun run dev` | Start the development server |
-| `bun run build` | Create a production build |
-| `bun run start` | Serve an existing production build; run `build` first |
-| `bun test lib/payroll.test.ts` | Run the existing payroll unit tests |
+| Command                        | Purpose                                               |
+| ------------------------------ | ----------------------------------------------------- |
+| `bun run dev`                  | Start the development server                          |
+| `bun run build`                | Create a production build                             |
+| `bun run start`                | Serve an existing production build; run `build` first |
+| `bun test lib/payroll.test.ts` | Run the existing payroll unit tests                   |
 
 There are no `lint` or `test` scripts in `package.json`. Payroll tests cover pay tiers, unpaid breaks, validation and per-day week state. Run `bunx tsc --noEmit --incremental false` to check types.
 

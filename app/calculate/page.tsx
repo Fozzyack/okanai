@@ -6,7 +6,8 @@ import styles from "./calculator.module.css";
 
 export const metadata: Metadata = {
     title: "Payroll calculator | okanai",
-    description: "Build your week, one shift at a time. Estimate weekly gross pay with clear weekend and daily overtime assumptions.",
+    description:
+        "Build your week, one shift at a time. Estimate weekly gross pay with clear weekend and daily overtime assumptions.",
 };
 
 export default function CalculatePage() {

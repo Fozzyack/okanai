@@ -1,36 +1,263 @@
-.label { display: block; font-size: 12px; font-weight: 600; color: #52617e; }
-.timeFields { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr)); gap: clamp(12px, 2.5vw, 18px); }
-.timeFields > div { container-type: inline-size; min-width: 0; padding: clamp(14px, 3vw, 18px) clamp(12px, 2.5vw, 18px); border: 1px solid #182b511c; border-radius: 20px; background: #ffffffb3; box-shadow: 0 8px 26px #182b5107, inset 0 1px 0 white; transition: border-color .18s ease, box-shadow .18s ease; }
-.timeFields > div:hover { border-color: #315de845; }
-.timeFields > div:focus-within { border-color: #315de8; box-shadow: 0 0 0 4px #315de814; }
-.timeDisplay { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 8px 0 12px; font-size: clamp(1.3rem, 17cqi, 2.6rem); font-weight: 600; line-height: 1.25; letter-spacing: -.055em; font-variant-numeric: tabular-nums; }
-.timeDisplay span { flex-shrink: 0; font-size: 12px; line-height: 1; letter-spacing: 0; color: #315de8; background: #edf2ff; border-radius: 8px; padding: 5px 7px; }
-.timeFields input { display: block; box-sizing: border-box; width: 100%; max-width: 100%; min-width: 0; min-height: 44px; border: 1px solid #182b5120; border-radius: 12px; padding: 8px; background: #fffaf8; font-size: 16px; color: #182b51; }
-.timeFields input::-webkit-date-and-time-value { min-width: 0; text-align: left; }
-.timeFields input::-webkit-datetime-edit { padding: 0; }
-.timeFields small { display: block; font-size: 10px; margin-top: 6px; color: #65718a; }
-.rangeArea { position: relative; height: 44px; margin: 32px 14px 0; }
-.rail { position: absolute; left: 0; right: 0; top: 18px; height: 8px; background: #e8edf7; border-radius: 8px; overflow: hidden; }
-.rail span { position: absolute; height: 100%; background: #315de8; border-radius: inherit; }
-.range { appearance: none; -webkit-appearance: none; pointer-events: none; position: absolute; inset: 0; width: calc(100% + 28px); height: 44px; margin: 0 -14px; background: transparent; }
-.range::-webkit-slider-runnable-track { height: 8px; background: transparent; }
-.range::-moz-range-track { height: 8px; background: transparent; }
-.range::-webkit-slider-thumb { appearance: none; -webkit-appearance: none; pointer-events: auto; width: 28px; height: 28px; margin-top: -10px; border: 5px solid white; border-radius: 50%; background: #315de8; box-shadow: 0 2px 12px #182b5133; cursor: ew-resize; }
-.range::-moz-range-thumb { pointer-events: auto; width: 18px; height: 18px; border: 5px solid white; border-radius: 50%; background: #315de8; box-shadow: 0 2px 12px #182b5133; cursor: ew-resize; }
-.range:focus-visible { outline: none; z-index: 2; }
-.range:focus-visible::-webkit-slider-thumb { outline: 3px solid #315de8; outline-offset: 3px; }
-.range:focus-visible::-moz-range-thumb { outline: 3px solid #315de8; outline-offset: 3px; }
-.ticks { display: flex; justify-content: space-between; font-size: 9px; color: #65718a; }
-.duration { width: fit-content; margin: 24px auto 0; padding: 8px 14px; border: 1px solid #315de814; border-radius: 30px; background: #edf2ff99; text-align: center; color: #52617e; font-size: 13px; font-variant-numeric: tabular-nums; }
-.holiday { display: flex; align-items: center; gap: 6px; margin-top: 20px; font-size: 13px; color: #52617e; }
-.holiday label { display: flex; align-items: center; gap: 10px; width: fit-content; min-height: 44px; font-weight: 600; cursor: pointer; transition: color .18s ease; }
-.holiday label:hover, .holiday label:has(input:checked) { color: #315de8; }
-.holiday input { width: 18px; height: 18px; margin: 0; accent-color: #315de8; cursor: pointer; }
-.holiday input:focus-visible { outline: 2px solid #315de8; outline-offset: 3px; }
-.holidayHint { position: relative; display: inline-flex; }
-.holidayInfo { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 44px; padding: 0; border: 0; background: transparent; color: #8492ad; cursor: pointer; transition: color .18s ease; }
-.holidayInfo:hover, .holidayInfo:focus-visible { color: #315de8; }
-.holidayInfo:focus-visible { outline: 2px solid #315de8; outline-offset: 2px; border-radius: 8px; }
-.holidayTooltip { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); z-index: 3; width: max-content; padding: 9px 13px; border-radius: 10px; background: #182b51; color: #fff; font-size: 12px; font-weight: 600; box-shadow: 0 6px 18px #182b5126; }
-.holidayTooltip::after { content: ""; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 5px solid transparent; border-top-color: #182b51; }
-.recap { margin: 0; text-align: center; font-size: 13px; color: #52617e; }
+.label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #52617e;
+}
+.timeFields {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr));
+    gap: clamp(12px, 2.5vw, 18px);
+}
+.timeFields > div {
+    container-type: inline-size;
+    min-width: 0;
+    padding: clamp(14px, 3vw, 18px) clamp(12px, 2.5vw, 18px);
+    border: 1px solid #182b511c;
+    border-radius: 20px;
+    background: #ffffffb3;
+    box-shadow:
+        0 8px 26px #182b5107,
+        inset 0 1px 0 white;
+    transition:
+        border-color 0.18s ease,
+        box-shadow 0.18s ease;
+}
+.timeFields > div:hover {
+    border-color: #315de845;
+}
+.timeFields > div:focus-within {
+    border-color: #315de8;
+    box-shadow: 0 0 0 4px #315de814;
+}
+.timeDisplay {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin: 8px 0 12px;
+    font-size: clamp(1.3rem, 17cqi, 2.6rem);
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.055em;
+    font-variant-numeric: tabular-nums;
+}
+.timeDisplay span {
+    flex-shrink: 0;
+    font-size: 12px;
+    line-height: 1;
+    letter-spacing: 0;
+    color: #315de8;
+    background: #edf2ff;
+    border-radius: 8px;
+    padding: 5px 7px;
+}
+.timeFields input {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    min-height: 44px;
+    border: 1px solid #182b5120;
+    border-radius: 12px;
+    padding: 8px;
+    background: #fffaf8;
+    font-size: 16px;
+    color: #182b51;
+}
+.timeFields input::-webkit-date-and-time-value {
+    min-width: 0;
+    text-align: left;
+}
+.timeFields input::-webkit-datetime-edit {
+    padding: 0;
+}
+.timeFields small {
+    display: block;
+    font-size: 10px;
+    margin-top: 6px;
+    color: #65718a;
+}
+.rangeArea {
+    position: relative;
+    height: 44px;
+    margin: 32px 14px 0;
+}
+.rail {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 18px;
+    height: 8px;
+    background: #e8edf7;
+    border-radius: 8px;
+    overflow: hidden;
+}
+.rail span {
+    position: absolute;
+    height: 100%;
+    background: #315de8;
+    border-radius: inherit;
+}
+.range {
+    appearance: none;
+    -webkit-appearance: none;
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    width: calc(100% + 28px);
+    height: 44px;
+    margin: 0 -14px;
+    background: transparent;
+}
+.range::-webkit-slider-runnable-track {
+    height: 8px;
+    background: transparent;
+}
+.range::-moz-range-track {
+    height: 8px;
+    background: transparent;
+}
+.range::-webkit-slider-thumb {
+    appearance: none;
+    -webkit-appearance: none;
+    pointer-events: auto;
+    width: 28px;
+    height: 28px;
+    margin-top: -10px;
+    border: 5px solid white;
+    border-radius: 50%;
+    background: #315de8;
+    box-shadow: 0 2px 12px #182b5133;
+    cursor: ew-resize;
+}
+.range::-moz-range-thumb {
+    pointer-events: auto;
+    width: 18px;
+    height: 18px;
+    border: 5px solid white;
+    border-radius: 50%;
+    background: #315de8;
+    box-shadow: 0 2px 12px #182b5133;
+    cursor: ew-resize;
+}
+.range:focus-visible {
+    outline: none;
+    z-index: 2;
+}
+.range:focus-visible::-webkit-slider-thumb {
+    outline: 3px solid #315de8;
+    outline-offset: 3px;
+}
+.range:focus-visible::-moz-range-thumb {
+    outline: 3px solid #315de8;
+    outline-offset: 3px;
+}
+.ticks {
+    display: flex;
+    justify-content: space-between;
+    font-size: 9px;
+    color: #65718a;
+}
+.duration {
+    width: fit-content;
+    margin: 24px auto 0;
+    padding: 8px 14px;
+    border: 1px solid #315de814;
+    border-radius: 30px;
+    background: #edf2ff99;
+    text-align: center;
+    color: #52617e;
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+}
+.holiday {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 20px;
+    font-size: 13px;
+    color: #52617e;
+}
+.holiday label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: fit-content;
+    min-height: 44px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 0.18s ease;
+}
+.holiday label:hover,
+.holiday label:has(input:checked) {
+    color: #315de8;
+}
+.holiday input {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    accent-color: #315de8;
+    cursor: pointer;
+}
+.holiday input:focus-visible {
+    outline: 2px solid #315de8;
+    outline-offset: 3px;
+}
+.holidayHint {
+    position: relative;
+    display: inline-flex;
+}
+.holidayInfo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #8492ad;
+    cursor: pointer;
+    transition: color 0.18s ease;
+}
+.holidayInfo:hover,
+.holidayInfo:focus-visible {
+    color: #315de8;
+}
+.holidayInfo:focus-visible {
+    outline: 2px solid #315de8;
+    outline-offset: 2px;
+    border-radius: 8px;
+}
+.holidayTooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    width: max-content;
+    padding: 9px 13px;
+    border-radius: 10px;
+    background: #182b51;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    box-shadow: 0 6px 18px #182b5126;
+}
+.holidayTooltip::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: #182b51;
+}
+.recap {
+    margin: 0;
+    text-align: center;
+    font-size: 13px;
+    color: #52617e;
+}

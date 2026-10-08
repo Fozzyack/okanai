@@ -69,17 +69,19 @@ export default function CalculatorHelp() {
                             </li>
                             <li>
                                 For each day, drag the blue clock-in and
-                                clock-out handles. You can also use arrow keys or
-                                enter times directly. Check Public holiday if it
-                                applies to that day. Choose Next: unpaid break
-                                to open the separate break step without saving.
+                                clock-out handles. You can also use arrow keys
+                                or enter times directly. Check Public holiday if
+                                it applies to that day. Choose Next: unpaid
+                                break to open the separate break step without
+                                saving.
                             </li>
                             <li>
-                                Enter unpaid break minutes, then save
-                                the day to continue, or skip from either step for days you didn’t
-                                work. Previous traverses both steps without clearing
-                                your details. After editing breaks, times or the holiday
-                                checkbox, save again to include that day.
+                                Enter unpaid break minutes, then save the day to
+                                continue, or skip from either step for days you
+                                didn’t work. Previous traverses both steps
+                                without clearing your details. After editing
+                                breaks, times or the holiday checkbox, save
+                                again to include that day.
                             </li>
                             <li>
                                 After Sunday, see your weekly total and edit any
@@ -90,28 +92,30 @@ export default function CalculatorHelp() {
                     <section>
                         <h3>Choosing your times</h3>
                         <p>
-                            Times use 15-minute increments. Shifts must start and
-                            finish within the same day; midnight clock-out means
-                            12:00 AM the next day. Overnight shifts beyond
+                            Times use 15-minute increments. Shifts must start
+                            and finish within the same day; midnight clock-out
+                            means 12:00 AM the next day. Overnight shifts beyond
                             midnight aren’t supported yet. Your last saved
-                            worked times carry forward to later untouched days; edited
-                            drafts, saved days, and days off are kept. Skipping
-                            doesn’t change your remembered times. Public holiday
-                            selections stay with their own day and never carry
-                            forward. Suggestions only count once you save the
-                            day. A fresh week resets to 9 AM–5 PM and clears all
-                            holiday selections. Each day's values are retained when
-                            skipped or revisited. Summary Previous returns to
-                            Sunday's break; Edit opens a day's time step.
+                            worked times carry forward to later untouched days;
+                            edited drafts, saved days, and days off are kept.
+                            Skipping doesn’t change your remembered times.
+                            Public holiday selections stay with their own day
+                            and never carry forward. Suggestions only count once
+                            you save the day. A fresh week resets to 9 AM–5 PM
+                            and clears all holiday selections. Each day's values
+                            are retained when skipped or revisited. Summary
+                            Previous returns to Sunday's break; Edit opens a
+                            day's time step.
                         </p>
                     </section>
                     <section>
                         <h3>Public holidays</h3>
                         <p>
-                            Check Public holiday for a day to pay all paid
-                            hours at 2× your base rate. Public holidays override
+                            Check Public holiday for a day to pay all paid hours
+                            at 2× your base rate. Public holidays override
                             weekday and weekend tiers, and all paid hours appear
-                            as overtime in the breakdown. Multipliers do not stack.
+                            as overtime in the breakdown. Multipliers do not
+                            stack.
                         </p>
                     </section>
                     <section>
@@ -128,22 +132,24 @@ export default function CalculatorHelp() {
                     <section>
                         <h3>Unpaid breaks</h3>
                         <p>
-                            Breaks default to 0 and must be whole minutes from 0 up to the elapsed
-                            shift duration; an entire-shift break is allowed.
-                            Your last saved worked break prefills later untouched
-                            days; change it as needed. Edited drafts, saved days,
-                            and days off keep their own values. Skipping doesn’t
-                            change your remembered break, and a fresh week resets
-                            breaks to 0. If you shorten a shift below its suggested
-                            break, correct it on the break step; it is never
-                            automatically reduced.
+                            Breaks default to 0 and must be whole minutes from 0
+                            up to the elapsed shift duration; an entire-shift
+                            break is allowed. Your last saved worked break
+                            prefills later untouched days; change it as needed.
+                            Edited drafts, saved days, and days off keep their
+                            own values. Skipping doesn’t change your remembered
+                            break, and a fresh week resets breaks to 0. If you
+                            shorten a shift below its suggested break, correct
+                            it on the break step; it is never automatically
+                            reduced.
                         </p>
                         <p>
                             Tiers are allocated from elapsed time before breaks:
-                            unpaid time removes regular 1× hours first, then 1.5×
-                            hours, then 2× hours when the lower tier is exhausted.
-                            Totals show paid hours and gross pay after breaks;
-                            break deductions are already included, not subtracted again.
+                            unpaid time removes regular 1× hours first, then
+                            1.5× hours, then 2× hours when the lower tier is
+                            exhausted. Totals show paid hours and gross pay
+                            after breaks; break deductions are already included,
+                            not subtracted again.
                         </p>
                     </section>
                     <section>

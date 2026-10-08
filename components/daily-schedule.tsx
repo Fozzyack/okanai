@@ -93,14 +93,16 @@ export default function DailySchedule({
                                           0,
                                           Math.min(
                                               Number(event.target.value),
-                                              Math.ceil(shift.end / 15) * 15 - 15,
+                                              Math.ceil(shift.end / 15) * 15 -
+                                                  15,
                                           ),
                                       )
                                     : Math.min(
                                           1440,
                                           Math.max(
                                               Number(event.target.value),
-                                              Math.floor(shift.start / 15) * 15 +
+                                              Math.floor(shift.start / 15) *
+                                                  15 +
                                                   15,
                                           ),
                                       ),
@@ -140,22 +142,51 @@ export default function DailySchedule({
                         type="button"
                         className={styles.holidayInfo}
                         aria-label="Public holiday pay rate"
-                        aria-describedby={holidayTipOpen ? holidayTipId : undefined}
+                        aria-describedby={
+                            holidayTipOpen ? holidayTipId : undefined
+                        }
                         onFocus={() => setHolidayTipOpen(true)}
                         onBlur={() => setHolidayTipOpen(false)}
                         onClick={() => setHolidayTipOpen(true)}
                         onKeyDown={(event) => {
-                            if (event.key === "Escape") setHolidayTipOpen(false);
+                            if (event.key === "Escape")
+                                setHolidayTipOpen(false);
                         }}
                     >
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                            <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.7" />
-                            <path d="M12 11v6" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
-                            <circle cx="12" cy="7.5" r="1" fill="currentColor" />
+                        <svg
+                            width="18"
+                            height="18"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            aria-hidden="true"
+                        >
+                            <circle
+                                cx="12"
+                                cy="12"
+                                r="9"
+                                stroke="currentColor"
+                                strokeWidth="1.7"
+                            />
+                            <path
+                                d="M12 11v6"
+                                stroke="currentColor"
+                                strokeWidth="1.7"
+                                strokeLinecap="round"
+                            />
+                            <circle
+                                cx="12"
+                                cy="7.5"
+                                r="1"
+                                fill="currentColor"
+                            />
                         </svg>
                     </button>
                     {holidayTipOpen && (
-                        <span id={holidayTipId} role="tooltip" className={styles.holidayTooltip}>
+                        <span
+                            id={holidayTipId}
+                            role="tooltip"
+                            className={styles.holidayTooltip}
+                        >
                             2x base pay!!!
                         </span>
                     )}
