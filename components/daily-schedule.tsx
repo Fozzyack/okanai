@@ -121,14 +121,12 @@ export default function DailySchedule({
                         id="public-holiday"
                         type="checkbox"
                         checked={shift.publicHoliday ?? false}
-                        aria-describedby="public-holiday-description"
                         onChange={(event) =>
                             onHolidayChange(event.target.checked)
                         }
                     />
-                    Public holiday
+                    Is public holiday
                 </label>
-                <p id="public-holiday-description">All paid hours at 2×</p>
             </div>
         </>
     );

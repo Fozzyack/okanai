@@ -274,7 +274,7 @@ export default function Calculator() {
                         </div>
                         <dl className={styles.breakdown} data-calculator-reveal>
                             <div>
-                                <dt>Unpaid breaks <small>{Number(((weekly?.breakHours ?? 0) * 60).toFixed(2))} minutes · already deducted</small></dt>
+                                <dt>Total break time: {Number(((weekly?.breakHours ?? 0) * 60).toFixed(2))} minutes <small>Unpaid · already deducted</small></dt>
                                 <dd>−{weekly ? money(weekly.breakDeduction) : "—"}</dd>
                             </div>
                             <div>
@@ -320,10 +320,15 @@ export default function Calculator() {
                                                   ? "Day off"
                                                   : "Not completed · not counted"}
                                         </small>
+                                        {shifts[index].status === "worked" && (
+                                            <p className={styles.breakTime}>
+                                                Break time: {shifts[index].breakMinutes ?? 0} minutes
+                                            </p>
+                                        )}
                                     </div>
                                     <span>
                                         {Number((weekly?.entries[index].hours ?? 0).toFixed(2))} paid hrs
-                                        <small>{weekly?.entries[index].shiftHours ?? 0} elapsed hrs · {Number(((weekly?.entries[index].breakHours ?? 0) * 60).toFixed(2))} min break · −{weekly ? money(weekly.entries[index].breakDeduction) : "—"} already deducted</small>
+                                        <small>{weekly?.entries[index].shiftHours ?? 0} elapsed hrs · −{weekly ? money(weekly.entries[index].breakDeduction) : "—"} already deducted</small>
                                         <br />
                                         <strong>
                                             {weekly

@@ -31,6 +31,7 @@
 .dailyRow { display: flex; align-items: center; gap: 16px; padding: 16px 0; border-bottom: 1px solid #182b5110; font-size: 12px; }
 .dailyRow > div { flex: 1; min-width: 0; }
 .dailyRow small { display: block; font-size: 10px; color: #65718a; margin-top: 5px; }
+.breakTime { margin: 8px 0 0; font-size: 12px; font-weight: 500; color: #182b51; }
 .dailyRow > span { min-width: 0; max-width: 45%; text-align: right; font-size: 10px; color: #65718a; font-variant-numeric: tabular-nums; }
 .dailyRow > span strong { display: inline-block; color: #182b51; font-size: 12px; margin-top: 4px; overflow-wrap: anywhere; }
 @media (max-width: 480px) {
