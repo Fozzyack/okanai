@@ -71,12 +71,13 @@ export default function CalculatorHelp() {
                                 For each day, drag the blue clock-in and
                                 clock-out handles. You can also use arrow keys or
                                 enter times directly. Check Public holiday if it
-                                applies to that day.
+                                applies to that day. Enter unpaid break minutes
+                                (default 0).
                             </li>
                             <li>
                                 Save the day to continue, or skip days you didn’t
                                 work. Previous takes you back without clearing
-                                your details. After editing times or the holiday
+                                your details. After editing breaks, times or the holiday
                                 checkbox, save again to include that day.
                             </li>
                             <li>
@@ -98,7 +99,9 @@ export default function CalculatorHelp() {
                             selections stay with their own day and never carry
                             forward. Suggestions only count once you save the
                             day. A fresh week resets to 9 AM–5 PM and clears all
-                            holiday selections.
+                            holiday selections and resets breaks to 0. Breaks
+                            stay with their own day, including when skipped or
+                            revisited; they never carry forward to other days.
                         </p>
                     </section>
                     <section>
@@ -109,17 +112,26 @@ export default function CalculatorHelp() {
                             hours pay 2×. Saturday and Sunday: all hours are
                             overtime, with the first 3 hours at 1.5× and all
                             remaining hours at 2×. Public holidays override both
-                            weekday and weekend tiers: every worked hour pays 2×
+                            weekday and weekend tiers: every paid hour pays 2×
                             and appears as overtime in the breakdown.
                             Multipliers do not stack. No weekly overtime rule is
                             applied.
+                        </p>
+                        <p>
+                            Breaks must be whole minutes from 0 up to the elapsed
+                            shift duration; an entire-shift break is allowed.
+                            Tiers are allocated from elapsed time before breaks:
+                            unpaid time removes regular 1× hours first, then 1.5×
+                            hours, then 2× hours when the lower tier is exhausted.
+                            Totals show paid hours and gross pay after breaks;
+                            break deductions are already included, not subtracted again.
                         </p>
                     </section>
                     <section>
                         <h3>All amounts are AUD</h3>
                         <p>
                             This is a demo gross estimate, not legal payroll
-                            advice. Taxes, deductions, superannuation, and
+                            advice. Taxes, other deductions, superannuation, and
                             award-specific rules aren’t included. Your actual
                             pay depends on your employment terms and applicable
                             rules.

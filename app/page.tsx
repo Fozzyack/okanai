@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import LandingMotion from "./landing-motion";
 
@@ -51,16 +52,14 @@ export default function Home() {
                     aria-label="Okanai home"
                     className="flex items-center gap-2.5"
                 >
-                    <span
-                        className="relative flex h-8 w-8 items-center justify-center"
-                        aria-hidden="true"
-                    >
-                        <span className="absolute left-0 top-0 h-6 w-4 -rotate-35 rounded-full bg-[#315de8]" />
-                        <span className="absolute bottom-0 right-0 h-6 w-4 -rotate-35 rounded-full bg-[#eea9c6]" />
-                    </span>
-                    <span className="text-2xl font-bold tracking-[-1.2px]">
-                        okanai<span className="text-[#315de8]">.</span>
-                    </span>
+                    <Image
+                        src="/logo.svg"
+                        alt="Okanai"
+                        width={232}
+                        height={64}
+                        className="h-10 w-auto"
+                        priority
+                    />
                 </Link>
                 <nav
                     aria-label="Main navigation"

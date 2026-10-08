@@ -15,7 +15,9 @@ import {
     saveShift,
     shiftHours,
     updateShiftHoliday,
+    updateShiftBreak,
     updateShiftTime,
+    validateBreakMinutes,
     validateBasePay,
 } from "@/lib/payroll";
 import styles from "./calculator.module.css";
@@ -68,11 +70,19 @@ export default function Calculator() {
     const current = shifts[step - 1];
     let currentHours = 0;
     let shiftError = "";
+    let breakError = "";
     if (current) {
         try {
             currentHours = shiftHours(current.start, current.end);
         } catch (cause) {
             shiftError = (cause as Error).message;
+        }
+        if (!shiftError) {
+            try {
+                validateBreakMinutes(current.breakMinutes ?? 0, currentHours);
+            } catch (cause) {
+                breakError = (cause as Error).message;
+            }
         }
     }
     let weekly: ReturnType<typeof calculateWeek> | undefined;
@@ -83,15 +93,20 @@ export default function Calculator() {
             /* Invalid edited shifts never show stale totals. */
         }
     }
-    const estimate =
-        current && !shiftError && !payError
-            ? calculateGross(
+    let estimate: ReturnType<typeof calculateGross> | undefined;
+    if (current && !shiftError && !breakError && !payError) {
+        try {
+            estimate = calculateGross(
                   days[step - 1],
                   Number(pay),
                   currentHours,
                   current.publicHoliday,
-              )
-            : undefined;
+                  current.breakMinutes ?? 0,
+              );
+        } catch (cause) {
+            breakError = (cause as Error).message;
+        }
+    }
 
     function go(next: number) {
         setError("");
@@ -104,15 +119,15 @@ export default function Calculator() {
         setError("");
     }
     function complete(status: "worked" | "skipped") {
-        if (payError || (status === "worked" && shiftError)) {
-            setError(payError || shiftError);
+        if (payError || (status === "worked" && (shiftError || breakError))) {
+            setError(payError || shiftError || breakError);
             return;
         }
         setWeekForm((previous) => saveShift(previous, step - 1, status));
         setAnnouncement(
             status === "skipped"
                 ? `${days[step - 1]} marked as a day off.`
-                : `${days[step - 1]} saved: ${currentHours} hours, ${money(estimate!.gross)} AUD.`,
+                : `${days[step - 1]} saved: ${Number(estimate!.hours.toFixed(2))} paid hours, ${currentHours} elapsed hours, ${current.breakMinutes ?? 0} unpaid break minutes, ${money(estimate!.gross)} AUD.`,
         );
         go(step + 1);
     }
@@ -171,7 +186,13 @@ export default function Calculator() {
                                 day={days[step - 1]}
                                 shift={current}
                                 hours={currentHours}
+                                paidHours={estimate?.hours}
                                 error={shiftError}
+                                breakError={breakError}
+                                onBreakChange={(breakMinutes) => {
+                                    setWeekForm((previous) => updateShiftBreak(previous, step - 1, breakMinutes));
+                                    setError("");
+                                }}
                                 onTimeChange={updateTime}
                                 onHolidayChange={(publicHoliday) => {
                                     setWeekForm((previous) =>
@@ -190,7 +211,7 @@ export default function Calculator() {
                             role="alert"
                             className={styles.error}
                         >
-                            {error || (step > 0 ? shiftError : "")}
+                            {error || (step > 0 ? shiftError || breakError : "")}
                         </p>
                         <div className={styles.actions} data-calculator-reveal>
                             {step > 0 && (
@@ -225,18 +246,22 @@ export default function Calculator() {
                 ) : (
                     <>
                         <p className={styles.description} data-calculator-reveal>
-                            Estimated gross pay, before tax and deductions.
+                            Estimated gross pay after unpaid breaks, before tax and other deductions.
                         </p>
                         <div className={styles.total} data-calculator-reveal>
                             {weekly ? money(weekly.gross) : "—"}
-                            <span>AUD · {weekly?.hours ?? 0} hours</span>
+                            <span>AUD · {Number((weekly?.hours ?? 0).toFixed(2))} paid hours · {weekly?.shiftHours ?? 0} elapsed hours</span>
                         </div>
                         <dl className={styles.breakdown} data-calculator-reveal>
+                            <div>
+                                <dt>Unpaid breaks <small>{Number(((weekly?.breakHours ?? 0) * 60).toFixed(2))} minutes · already deducted</small></dt>
+                                <dd>−{weekly ? money(weekly.breakDeduction) : "—"}</dd>
+                            </div>
                             <div>
                                 <dt>
                                     Regular{" "}
                                     <small>
-                                        {weekly?.regularHours ?? 0} hours · 1×
+                                        {Number((weekly?.regularHours ?? 0).toFixed(2))} hours · 1×
                                         base rate
                                     </small>
                                 </dt>
@@ -248,8 +273,8 @@ export default function Calculator() {
                                 <dt>
                                     Overtime{" "}
                                     <small>
-                                        {weekly?.overtime150Hours ?? 0} hrs at
-                                        1.5× · {weekly?.overtime200Hours ?? 0} hrs
+                                        {Number((weekly?.overtime150Hours ?? 0).toFixed(2))} hrs at
+                                        1.5× · {Number((weekly?.overtime200Hours ?? 0).toFixed(2))} hrs
                                         at 2× (including public holidays)
                                     </small>
                                 </dt>
@@ -277,7 +302,8 @@ export default function Calculator() {
                                         </small>
                                     </div>
                                     <span>
-                                        {weekly?.entries[index].hours ?? 0} hrs
+                                        {Number((weekly?.entries[index].hours ?? 0).toFixed(2))} paid hrs
+                                        <small>{weekly?.entries[index].shiftHours ?? 0} elapsed hrs · {Number(((weekly?.entries[index].breakHours ?? 0) * 60).toFixed(2))} min break · −{weekly ? money(weekly.entries[index].breakDeduction) : "—"} already deducted</small>
                                         <br />
                                         <strong>
                                             {weekly

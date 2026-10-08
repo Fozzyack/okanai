@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" fill="none">
+  <title>Okanai</title>
+  <rect width="64" height="64" rx="16" fill="#f8faff"/>
+  <path d="M47 26a20 20 0 1 1-9-13" stroke="#315de8" stroke-width="10" stroke-linecap="round"/>
+  <path d="m39 24 14-14m-11 0h11v11" stroke="#eea9c6" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

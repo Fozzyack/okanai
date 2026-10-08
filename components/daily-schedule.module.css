@@ -25,6 +25,10 @@
 .holiday label { display: flex; align-items: center; gap: 10px; font-weight: 600; cursor: pointer; }
 .holiday input { width: 16px; height: 16px; accent-color: #315de8; }
 .holiday p { margin: 6px 0 0 26px; font-size: 11px; color: #65718a; }
+.breakField { margin-top: 20px; padding: 16px 18px; border: 1px solid #182b5117; border-radius: 16px; background: #ffffff80; }
+.breakField input { width: 100%; margin-top: 10px; border: 1px solid #182b5120; border-radius: 12px; padding: 10px; background: #fffaf8; color: #182b51; }
+.breakField input:focus-visible { outline: 2px solid #315de8; outline-offset: 2px; }
+.breakField p { margin: 8px 0 0; font-size: 11px; color: #65718a; }
 @media (max-width: 480px) {
     .timeFields { gap: 12px; }
     .timeFields > div { padding: 14px 10px; }

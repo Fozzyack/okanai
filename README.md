@@ -1,6 +1,6 @@
 # Okanai
 
-A demo weekly gross-pay calculator for hourly work, with weekday, weekend, and public-holiday rates. Amounts are in Australian dollars (AUD), before tax and deductions; actual payroll rules may differ.
+A demo weekly gross-pay calculator for hourly work, with weekday, weekend, and public-holiday rates and per-day unpaid breaks. Amounts are in Australian dollars (AUD), after unpaid breaks and before tax and other deductions; actual payroll rules may differ.
 
 Built with Next.js 16.4, React 19.3, TypeScript, Tailwind CSS 4, and GSAP with `@gsap/react`. Landing-page and calculator reveal animations respect reduced-motion preferences.
 
@@ -23,15 +23,15 @@ Open [http://localhost:3000](http://localhost:3000) for the landing page, or [ht
 ## Using the calculator
 
 1. Enter your base hourly rate (default: $25 AUD; zero is allowed).
-2. Work through Monday–Sunday. Use the clock-in and clock-out sliders, arrow keys, or time inputs, and mark public holidays where applicable.
+2. Work through Monday–Sunday. Use the clock-in and clock-out sliders, arrow keys, or time inputs, enter unpaid break minutes (default 0), and mark public holidays where applicable.
 3. Choose **Save & next**, or skip a day you did not work. After Sunday, review weekly hours, gross pay, regular/overtime totals, and the daily breakdown.
-4. Edit a day or your base pay from the summary. After changing times or a holiday selection, save the day again to include it in totals.
+4. Edit a day or your base pay from the summary. After changing times, breaks or a holiday selection, save the day again to include it in totals. Summaries distinguish paid from elapsed hours and show break deductions already included in pay.
 
-Times use 15-minute increments. The end must be after the start within the same day; midnight clock-out means the end of that day. Shifts extending beyond midnight are not supported, and breaks are not deducted.
+Times use 15-minute increments. The end must be after the start within the same day; midnight clock-out means the end of that day. Shifts extending beyond midnight are not supported. Unpaid breaks use whole minutes from 0 to the elapsed shift duration; an entire-shift break is allowed. Empty, nonfinite, negative, fractional-minute or overlong breaks cannot be saved as worked days.
 
-New weeks suggest 9 AM–5 PM. Saving a worked day carries its times forward to untouched draft days, without changing edited drafts, saved days, or days off. Skipping does not change remembered times; holiday selections never carry forward. Draft and skipped days contribute nothing to totals.
+New weeks suggest 9 AM–5 PM. Saving a worked day carries its times forward to untouched draft days, without changing edited drafts, saved days, or days off. Skipping does not change remembered times; holiday selections and breaks never carry forward. Each day's break is retained when saving, skipping or navigating back. Draft and skipped days contribute nothing to totals, even with invalid breaks.
 
-Details are held only in browser memory and reset on reload. **Start a fresh week** clears all shifts and holiday selections and resets the hourly rate to $25 and suggested times to 9 AM–5 PM. The help button explains these rules in the app.
+Details, including each day's break, are held only in React browser memory and reset on reload. **Start a fresh week** clears all shifts and holiday selections, resets all breaks to 0, and resets the hourly rate to $25 and suggested times to 9 AM–5 PM. The help button explains these rules in the app.
 
 ### Estimate rules
 
@@ -43,7 +43,9 @@ Details are held only in browser memory and reset on reload. **Start a fresh wee
 
 Multipliers do not stack, and there is no weekly overtime threshold. For example, a 10-hour Monday at $25/hour yields $275 AUD: 8 × $25 plus 2 × $37.50.
 
-This is a demo estimate, not legal payroll advice. Taxes, deductions, superannuation, and award-specific rules are not included.
+Allocate these tiers from the original elapsed shift **before** deducting breaks. Breaks consume regular 1× hours first, then 1.5× hours, then 2× hours when each lower tier is exhausted, preserving higher-rate hours where possible. The same Monday with a 30-minute break pays $262.50: 7.5 × $25 plus 2 × $37.50, for 9.5 paid hours. `calculateGross` accepts optional fifth argument `breakMinutes` (default 0); `Shift.breakMinutes` is optional for older callers. Results expose net paid `hours`, elapsed `shiftHours`, `breakHours`, and `breakDeduction`; weekly totals aggregate the same fields for worked days only.
+
+This is a demo estimate, not legal payroll advice. Taxes, other deductions, superannuation, and award-specific rules are not included.
 
 The landing-page card displays a fixed, illustrative **$1,632.35 AUD**. It is not calculated from the card’s displayed day, rate, or hours and is not a calculator result. The `/calculate` route calculates totals from your saved inputs.
 
@@ -56,7 +58,7 @@ The landing-page card displays a fixed, illustrative **$1,632.35 AUD**. It is no
 | `bun run start` | Serve an existing production build; run `build` first |
 | `bun test lib/payroll.test.ts` | Run the existing payroll unit tests |
 
-There are no `lint` or `test` scripts in `package.json`. The existing tests contain outdated expectations for some pay tiers and currently fail; `lib/payroll.ts` and the calculator help describe the implemented rules.
+There are no `lint` or `test` scripts in `package.json`. Payroll tests cover pay tiers, unpaid breaks, validation and per-day week state. Run `bunx tsc --noEmit --incremental false` to check types.
 
 ## Project files
 
