@@ -85,8 +85,6 @@ export default function Home() {
                             data-hero-reveal
                             className="mb-7 inline-flex items-center gap-2.5 rounded-full border border-[#315de8]/15 bg-[#edf2ff] px-3.5 py-2 text-[11px] font-semibold tracking-[1.5px] text-[#315de8]"
                         >
-                            <span className="h-1.5 w-1.5 rounded-full bg-[#315de8]" />{" "}
-                            LESS GUESSWORK. MORE CLARITY.
                         </div>
                         <h1
                             data-hero-reveal
