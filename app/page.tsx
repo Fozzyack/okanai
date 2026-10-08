@@ -55,7 +55,7 @@ export default function Home() {
                     <Image
                         src="/logo.svg"
                         alt="Okanai"
-                        width={232}
+                        width={266}
                         height={64}
                         className="h-10 w-auto"
                         priority

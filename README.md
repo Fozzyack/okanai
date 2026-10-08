@@ -23,13 +23,13 @@ Open [http://localhost:3000](http://localhost:3000) for the landing page, or [ht
 ## Using the calculator
 
 1. Enter your base hourly rate (default: $25 AUD; zero is allowed).
-2. Work through Monday–Sunday. Use the clock-in and clock-out sliders, arrow keys, or time inputs, enter unpaid break minutes (default 0), and mark public holidays where applicable.
-3. Choose **Save & next**, or skip a day you did not work. After Sunday, review weekly hours, gross pay, regular/overtime totals, and the daily breakdown.
+2. Work through Monday–Sunday in two steps per day. First use the clock-in and clock-out sliders, arrow keys, or time inputs and mark public holidays. Choose **Next: unpaid break** to continue without saving the day.
+3. Enter unpaid break minutes (default 0), then choose **Save & next** (or **See my weekly pay** on Sunday). Skip from either step for a day you did not work. After Sunday, review weekly hours, gross pay, regular/overtime totals, and the daily breakdown.
 4. Edit a day or your base pay from the summary. After changing times, breaks or a holiday selection, save the day again to include it in totals. Summaries distinguish paid from elapsed hours and show break deductions already included in pay.
 
 Times use 15-minute increments. The end must be after the start within the same day; midnight clock-out means the end of that day. Shifts extending beyond midnight are not supported. Unpaid breaks use whole minutes from 0 to the elapsed shift duration; an entire-shift break is allowed. Empty, nonfinite, negative, fractional-minute or overlong breaks cannot be saved as worked days.
 
-New weeks suggest 9 AM–5 PM. Saving a worked day carries its times forward to untouched draft days, without changing edited drafts, saved days, or days off. Skipping does not change remembered times; holiday selections and breaks never carry forward. Each day's break is retained when saving, skipping or navigating back. Draft and skipped days contribute nothing to totals, even with invalid breaks.
+New weeks suggest 9 AM–5 PM and a 0-minute break. Saving a worked day carries its times and break forward to later untouched draft days, without changing edited drafts (including edited breaks), saved days, or days off. Skipping does not change remembered times or breaks; holiday selections never carry forward. Each day's values are retained when saving, skipping or navigating back. Previous traverses both steps, summary Previous returns to Sunday's break, and Edit opens the day's time step. A carried break longer than a shortened shift must be corrected on the break step; it does not block the time step or get clamped. Draft and skipped days contribute nothing to totals, even with invalid breaks.
 
 Details, including each day's break, are held only in React browser memory and reset on reload. **Start a fresh week** clears all shifts and holiday selections, resets all breaks to 0, and resets the hourly rate to $25 and suggested times to 9 AM–5 PM. The help button explains these rules in the app.
 
@@ -65,7 +65,7 @@ There are no `lint` or `test` scripts in `package.json`. Payroll tests cover pay
 - `app/page.tsx` — landing page and illustrative pay card.
 - `app/landing-motion.tsx` — scoped GSAP hero animations using `useGSAP`, with reduced-motion handling and cleanup.
 - `app/calculate/` — calculator route, step-by-step form, summary, and help dialog.
-- `components/` — hourly-rate and daily-schedule inputs.
+- `components/` — hourly-rate, daily-schedule, and daily-break inputs.
 - `lib/payroll.ts` — pay rules, validation, shift state, and AUD/time formatting.
 - `lib/payroll.test.ts` — payroll unit tests.
 - `app/layout.tsx` and `app/globals.css` — shared layout, Geist fonts, and global styles.

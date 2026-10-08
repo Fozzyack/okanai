@@ -61,11 +61,11 @@ export type Shift = { start: number; end: number; status: "draft" | "worked" | "
 
 export type WeekForm = {
   shifts: Shift[];
-  remembered: { start: number; end: number };
+  remembered: { start: number; end: number; breakMinutes: number };
 };
 
 export function freshWeek(): WeekForm {
-  const remembered = { start: 540, end: 1020 };
+  const remembered = { start: 540, end: 1020, breakMinutes: 0 };
   return {
     remembered,
     shifts: days.map(() => ({ ...remembered, status: "draft", touched: false, publicHoliday: false, breakMinutes: 0 })),
@@ -94,7 +94,7 @@ export function saveShift(form: WeekForm, index: number, status: "worked" | "ski
   const current = form.shifts[index];
   if (status === "worked") validateBreakMinutes(current.breakMinutes ?? 0, shiftHours(current.start, current.end));
   const remembered = status === "worked"
-    ? { start: current.start, end: current.end }
+    ? { start: current.start, end: current.end, breakMinutes: current.breakMinutes ?? 0 }
     : form.remembered;
   return {
     remembered,

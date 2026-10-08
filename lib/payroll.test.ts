@@ -167,7 +167,8 @@ test("break edits stay per day through saving, skipping, revisiting and reset", 
   assert.equal(form.shifts[0].touched, true);
   form = saveShift(form, 0, "worked");
   assert.equal(form.shifts[1].end, 1140);
-  assert.equal(form.shifts[1].breakMinutes, 0);
+  assert.equal(form.shifts[1].breakMinutes, 30);
+  assert.deepEqual(form.remembered, { start: 540, end: 1140, breakMinutes: 30 });
   form = updateShiftBreak(form, 1, 60);
   form = saveShift(form, 1, "skipped");
   assert.equal(form.shifts[0].breakMinutes, 30);
@@ -180,9 +181,55 @@ test("break edits stay per day through saving, skipping, revisiting and reset", 
   form = updateShiftTime(form, 0, "start", 600);
   assert.equal(form.shifts[0].breakMinutes, 45);
   assert.equal(form.shifts[1].breakMinutes, 60);
-  assert.ok(form.shifts.slice(2).every((shift) => shift.breakMinutes === 0));
+  assert.ok(form.shifts.slice(2).every((shift) => shift.breakMinutes === 45));
+  assert.equal(freshWeek().remembered.breakMinutes, 0);
   assert.deepEqual(freshWeek(), initial);
   assert.equal(form.shifts[0].breakMinutes, 45); // Reset does not mutate the old week.
+});
+
+test("worked saves seed times and breaks only into later untouched drafts", () => {
+  let form = freshWeek();
+  form = saveShift(updateShiftBreak(form, 4, 10), 4, "worked");
+  form = saveShift(updateShiftBreak(form, 5, 20), 5, "skipped");
+  form = updateShiftTime(form, 1, "start", 600);
+  form = updateShiftBreak(form, 2, 60);
+  form = updateShiftHoliday(form, 3, true);
+  const protectedDays = form.shifts.slice(1, 6);
+  form = updateShiftTime(form, 0, "end", 1140);
+  form = saveShift(updateShiftBreak(form, 0, 45), 0, "worked");
+  assert.deepEqual(form.shifts.slice(1, 6), protectedDays);
+  assert.deepEqual(form.remembered, { start: 540, end: 1140, breakMinutes: 45 });
+  assert.equal(form.shifts[6].breakMinutes, 45);
+  assert.equal(form.shifts[6].end, 1140);
+  assert.equal(form.shifts[6].publicHoliday, false);
+  assert.equal(form.shifts[6].status, "draft");
+  // Editing a later day does not alter earlier independent values.
+  const monday = form.shifts[0];
+  form = saveShift(updateShiftBreak(form, 6, 15), 6, "worked");
+  assert.deepEqual(form.shifts[0], monday);
+});
+
+test("skipping retains the remembered break and does not propagate an edited break", () => {
+  let form = saveShift(updateShiftBreak(freshWeek(), 0, 30), 0, "worked");
+  form = updateShiftBreak(form, 1, 90);
+  form = updateShiftTime(form, 1, "end", 1080);
+  form = saveShift(form, 1, "skipped");
+  assert.deepEqual(form.remembered, { start: 540, end: 1020, breakMinutes: 30 });
+  assert.equal(form.shifts[1].breakMinutes, 90);
+  assert.ok(form.shifts.slice(2).every((shift) => shift.breakMinutes === 30 && shift.end === 1020));
+});
+
+test("shortening a suggested shift retains its overlong break until explicitly corrected", () => {
+  let form = saveShift(updateShiftBreak(freshWeek(), 0, 60), 0, "worked");
+  form = updateShiftTime(form, 1, "end", 570);
+  assert.equal(shiftHours(form.shifts[1].start, form.shifts[1].end), 0.5);
+  assert.equal(form.shifts[1].breakMinutes, 60);
+  assert.throws(() => saveShift(form, 1, "worked"), RangeError);
+  assert.equal(form.remembered.breakMinutes, 60);
+  form = saveShift(updateShiftBreak(form, 1, 15), 1, "worked");
+  assert.equal(form.remembered.breakMinutes, 15);
+  assert.equal(form.shifts[2].breakMinutes, 15);
+  assert.equal(calculateWeek(25, form.shifts).entries[1].hours, 0.25);
 });
 
 test("invalid input is rejected without treating empty fields as zero", () => {

@@ -71,12 +71,13 @@ export default function CalculatorHelp() {
                                 For each day, drag the blue clock-in and
                                 clock-out handles. You can also use arrow keys or
                                 enter times directly. Check Public holiday if it
-                                applies to that day. Enter unpaid break minutes
-                                (default 0).
+                                applies to that day. Choose Next: unpaid break
+                                to open the separate break step without saving.
                             </li>
                             <li>
-                                Save the day to continue, or skip days you didn’t
-                                work. Previous takes you back without clearing
+                                Enter unpaid break minutes (default 0), then save
+                                the day to continue, or skip from either step for days you didn’t
+                                work. Previous traverses both steps without clearing
                                 your details. After editing breaks, times or the holiday
                                 checkbox, save again to include that day.
                             </li>
@@ -93,15 +94,17 @@ export default function CalculatorHelp() {
                             finish within the same day; midnight clock-out means
                             12:00 AM the next day. Overnight shifts beyond
                             midnight aren’t supported yet. Your last saved
-                            worked times carry forward to untouched days; edited
+                                worked times and break carry forward to later untouched days; edited
                             drafts, saved days, and days off are kept. Skipping
-                            doesn’t change your remembered times. Public holiday
+                                doesn’t change your remembered times or break. Public holiday
                             selections stay with their own day and never carry
                             forward. Suggestions only count once you save the
                             day. A fresh week resets to 9 AM–5 PM and clears all
-                            holiday selections and resets breaks to 0. Breaks
-                            stay with their own day, including when skipped or
-                            revisited; they never carry forward to other days.
+                                holiday selections and resets breaks to 0. Each day's values
+                                are retained when skipped or revisited. If you shorten a shift
+                                below its suggested break, correct the break on the next step;
+                                it is never automatically reduced. Summary Previous returns
+                                to Sunday's break; Edit opens a day's time step.
                         </p>
                     </section>
                     <section>

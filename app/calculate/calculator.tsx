@@ -5,6 +5,7 @@ import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import BaseHourlyRate from "@/components/base-hourly-rate";
 import DailySchedule from "@/components/daily-schedule";
+import DailyBreak from "@/components/daily-break";
 import {
     calculateGross,
     calculateWeek,
@@ -67,7 +68,10 @@ export default function Calculator() {
     }, [step]);
 
     const payError = validateBasePay(pay);
-    const current = shifts[step - 1];
+    // Odd steps choose times; even steps confirm breaks and save the day.
+    const dayIndex = Math.floor((step - 1) / 2);
+    const isBreakStep = step > 0 && step < 15 && step % 2 === 0;
+    const current = step > 0 && step < 15 ? shifts[dayIndex] : undefined;
     let currentHours = 0;
     let shiftError = "";
     let breakError = "";
@@ -77,7 +81,7 @@ export default function Calculator() {
         } catch (cause) {
             shiftError = (cause as Error).message;
         }
-        if (!shiftError) {
+        if (isBreakStep && !shiftError) {
             try {
                 validateBreakMinutes(current.breakMinutes ?? 0, currentHours);
             } catch (cause) {
@@ -94,15 +98,15 @@ export default function Calculator() {
         }
     }
     let estimate: ReturnType<typeof calculateGross> | undefined;
-    if (current && !shiftError && !breakError && !payError) {
+    if (current && isBreakStep && !shiftError && !breakError && !payError) {
         try {
             estimate = calculateGross(
-                  days[step - 1],
-                  Number(pay),
-                  currentHours,
-                  current.publicHoliday,
-                  current.breakMinutes ?? 0,
-              );
+                days[dayIndex],
+                Number(pay),
+                currentHours,
+                current.publicHoliday,
+                current.breakMinutes ?? 0,
+            );
         } catch (cause) {
             breakError = (cause as Error).message;
         }
@@ -114,7 +118,7 @@ export default function Calculator() {
     }
     function updateTime(key: "start" | "end", value: number) {
         setWeekForm((previous) =>
-            updateShiftTime(previous, step - 1, key, value),
+            updateShiftTime(previous, dayIndex, key, value),
         );
         setError("");
     }
@@ -123,19 +127,22 @@ export default function Calculator() {
             setError(payError || shiftError || breakError);
             return;
         }
-        setWeekForm((previous) => saveShift(previous, step - 1, status));
+        setWeekForm((previous) => saveShift(previous, dayIndex, status));
         setAnnouncement(
             status === "skipped"
-                ? `${days[step - 1]} marked as a day off.`
-                : `${days[step - 1]} saved: ${Number(estimate!.hours.toFixed(2))} paid hours, ${currentHours} elapsed hours, ${current.breakMinutes ?? 0} unpaid break minutes, ${money(estimate!.gross)} AUD.`,
+                ? `${days[dayIndex]} marked as a day off.`
+                : `${days[dayIndex]} saved: ${Number(estimate!.hours.toFixed(2))} paid hours, ${currentHours} elapsed hours, ${current!.breakMinutes ?? 0} unpaid break minutes, ${money(estimate!.gross)} AUD.`,
         );
-        go(step + 1);
+        go(dayIndex * 2 + 3);
     }
     function submit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
         if (step === 0) {
             if (payError) setError(payError);
             else go(1);
+        } else if (!isBreakStep) {
+            if (payError || shiftError) setError(payError || shiftError);
+            else go(step + 1);
         } else complete("worked");
     }
 
@@ -155,22 +162,28 @@ export default function Calculator() {
                             <br />
                             <span>hourly pay.</span>
                         </>
-                    ) : step === 8 ? (
+                    ) : step === 15 ? (
                         <>
                             Your week.
                             <br />
                             <span>All added up.</span>
                         </>
+                    ) : isBreakStep ? (
+                        <>
+                            Any unpaid break
+                            <br />
+                            <span>on {days[dayIndex]}?</span>
+                        </>
                     ) : (
                         <>
                             When did you work
                             <br />
-                            <span>{days[step - 1]}?</span>
+                            <span>{days[dayIndex]}?</span>
                         </>
                     )}
                 </h1>
 
-                {step < 8 ? (
+                {step < 15 ? (
                     <form onSubmit={submit} noValidate>
                         {step === 0 ? (
                             <BaseHourlyRate
@@ -181,24 +194,29 @@ export default function Calculator() {
                                     setError("");
                                 }}
                             />
-                        ) : (
-                            <DailySchedule
-                                day={days[step - 1]}
-                                shift={current}
+                        ) : isBreakStep ? (
+                            <DailyBreak
+                                shift={current!}
                                 hours={currentHours}
                                 paidHours={estimate?.hours}
-                                error={shiftError}
-                                breakError={breakError}
-                                onBreakChange={(breakMinutes) => {
-                                    setWeekForm((previous) => updateShiftBreak(previous, step - 1, breakMinutes));
+                                error={breakError}
+                                onChange={(breakMinutes) => {
+                                    setWeekForm((previous) => updateShiftBreak(previous, dayIndex, breakMinutes));
                                     setError("");
                                 }}
+                            />
+                        ) : (
+                            <DailySchedule
+                                day={days[dayIndex]}
+                                shift={current!}
+                                hours={currentHours}
+                                error={shiftError}
                                 onTimeChange={updateTime}
                                 onHolidayChange={(publicHoliday) => {
                                     setWeekForm((previous) =>
                                         updateShiftHoliday(
                                             previous,
-                                            step - 1,
+                                            dayIndex,
                                             publicHoliday,
                                         ),
                                     );
@@ -226,7 +244,9 @@ export default function Calculator() {
                             <button type="submit" className={styles.primary}>
                                 {step === 0
                                     ? "Let’s start"
-                                    : step === 7
+                                    : !isBreakStep
+                                      ? "Next: unpaid break"
+                                      : step === 14
                                       ? "See my weekly pay"
                                       : "Save & next"}
                                 <span aria-hidden="true">↗</span>
@@ -239,7 +259,7 @@ export default function Calculator() {
                                 data-calculator-reveal
                                 onClick={() => complete("skipped")}
                             >
-                                Didn’t work {days[step - 1]}? Skip this day →
+                                Didn’t work {days[dayIndex]}? Skip this day →
                             </button>
                         )}
                     </form>
@@ -316,7 +336,7 @@ export default function Calculator() {
                                     </span>
                                     <button
                                         type="button"
-                                        onClick={() => go(index + 1)}
+                                        onClick={() => go(index * 2 + 1)}
                                         aria-label={`Edit ${day}`}
                                         className={styles.edit}
                                     >
@@ -328,7 +348,7 @@ export default function Calculator() {
                         <div className={styles.actions} data-calculator-reveal>
                             <button
                                 className={styles.secondary}
-                                onClick={() => go(7)}
+                                onClick={() => go(14)}
                             >
                                 ← Previous
                             </button>

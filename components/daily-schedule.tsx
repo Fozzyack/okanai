@@ -13,24 +13,18 @@ type DailyScheduleProps = {
     day: Day;
     shift: Shift;
     hours: number;
-    paidHours?: number;
     error: string;
-    breakError: string;
     onTimeChange: (key: "start" | "end", value: number) => void;
     onHolidayChange: (publicHoliday: boolean) => void;
-    onBreakChange: (breakMinutes: number) => void;
 };
 
 export default function DailySchedule({
     day,
     shift,
     hours,
-    paidHours,
     error,
-    breakError,
     onTimeChange,
     onHolidayChange,
-    onBreakChange,
 }: DailyScheduleProps) {
     return (
         <>
@@ -119,24 +113,8 @@ export default function DailySchedule({
                 <span>12 AM</span>
             </div>
             <p className={styles.duration} data-calculator-reveal>
-                {error ? "Check your times" : `${hours} elapsed hours · ${paidHours === undefined ? "—" : Number(paidHours.toFixed(2))} paid hours`}
+                {error ? "Check your times" : `${hours} elapsed hours`}
             </p>
-            <div className={styles.breakField} data-calculator-reveal>
-                <label htmlFor="unpaid-break" className={styles.label}>Unpaid break (minutes)</label>
-                <input
-                    id="unpaid-break"
-                    type="number"
-                    min="0"
-                    max={Math.max(0, shift.end - shift.start)}
-                    step="1"
-                    required
-                    value={Number.isFinite(shift.breakMinutes ?? 0) ? shift.breakMinutes ?? 0 : ""}
-                    aria-invalid={Boolean(breakError)}
-                    aria-describedby="break-description calculator-error"
-                    onChange={(event) => onBreakChange(event.target.value === "" ? NaN : event.target.valueAsNumber)}
-                />
-                <p id="break-description">Whole minutes, up to {Math.max(0, shift.end - shift.start)} minutes (your elapsed shift). Deducted from 1× hours first, then 1.5×, then 2×.</p>
-            </div>
             <div className={styles.holiday} data-calculator-reveal>
                 <label htmlFor="public-holiday">
                     <input
