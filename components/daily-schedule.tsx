@@ -1,14 +1,35 @@
 "use client";
 
 import { useId, useState } from "react";
-import {
-    clockInput,
-    formatTime,
-    timeInputMinutes,
-    type Day,
-    type Shift,
-} from "@/lib/payroll";
 import styles from "./daily-schedule.module.css";
+
+type Day = string;
+type Shift = {
+    start: number;
+    end: number;
+    publicHoliday?: boolean;
+};
+
+function formatTime(minutes: number) {
+    const date = new Date(0, 0, 0, 0, minutes);
+    return new Intl.DateTimeFormat("en-AU", {
+        hour: "numeric",
+        minute: "2-digit",
+    }).format(date);
+}
+
+function clockInput(minutes: number) {
+    const normalized = minutes % 1440;
+    return `${String(Math.floor(normalized / 60)).padStart(2, "0")}:${String(normalized % 60).padStart(2, "0")}`;
+}
+
+function timeInputMinutes(value: string, key: "start" | "end") {
+    if (!/^\d{2}:\d{2}$/.test(value)) return undefined;
+    const [hours, minutes] = value.split(":").map(Number);
+    if (hours > 23 || minutes > 59) return undefined;
+    const total = hours * 60 + minutes;
+    return key === "end" && total === 0 ? 1440 : total;
+}
 
 type DailyScheduleProps = {
     day: Day;

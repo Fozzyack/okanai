@@ -1,6 +1,19 @@
-import { formatTime, type Shift } from "@/lib/payroll";
 import styles from "./daily-break.module.css";
 import scheduleStyles from "./daily-schedule.module.css";
+
+type Shift = {
+    start: number;
+    end: number;
+    publicHoliday?: boolean;
+    breakMinutes?: number;
+};
+
+function formatTime(minutes: number) {
+    return new Intl.DateTimeFormat("en-AU", {
+        hour: "numeric",
+        minute: "2-digit",
+    }).format(new Date(0, 0, 0, 0, minutes));
+}
 
 type DailyBreakProps = {
     shift: Shift;
