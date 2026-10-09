@@ -27,8 +27,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         >
             <body className="flex min-h-full flex-col bg-[#fffaf8] font-sans text-[#182b51]">
                 {children}
+                <Analytics />
             </body>
-            <Analytics   />
         </html>
     );
 }
