@@ -7,6 +7,8 @@ import { hoursWorked } from "@/types/calculate";
 import { init_hours, Steps } from "@/lib/calculate";
 import { useState } from "react";
 import Button from "@/components/ui/Button";
+import SettingsModal from "@/components/SettingsModal";
+import { PaySettings } from "@/types/calculate";
 
 export default function CalculatePage() {
     // Variables for main steps
@@ -65,8 +67,34 @@ export default function CalculatePage() {
         setStep(step - 1);
     };
 
+    const onSave = (settings: PaySettings) => {
+        setBonusPay1(settings.bonusPay1);
+        setBonusPay2(settings.bonusPay2);
+        setBonus1After(settings.bonus1After);
+        setBonus2After(settings.bonus2After);
+        setWeekendBonus1(settings.weekendBonus1);
+        setWeekendBonus2(settings.weekendBonus2);
+        setWeekendOvertimeAfter(settings.weekendOvertimeAfter);
+        setPublicHolidayBonus(settings.publicHolidayBonus);
+    };
+
     return (
         <div className="z-10">
+            <div className="mt-6 flex justify-end">
+                <SettingsModal
+                    values={{
+                        bonusPay1,
+                        bonusPay2,
+                        bonus1After,
+                        bonus2After,
+                        weekendBonus1,
+                        weekendBonus2,
+                        weekendOvertimeAfter,
+                        publicHolidayBonus,
+                    }}
+                    onSave={onSave}
+                />
+            </div>
             {step != Steps.PAY && step != Steps.SUMMARY && (
                 <div className="mt-12">
                     <Button

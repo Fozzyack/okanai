@@ -6,3 +6,14 @@ export type hoursWorked = {
     break_time: number;
     is_public_holiday: boolean;
 };
+
+export type PaySettings = {
+    bonusPay1: number;
+    bonusPay2: number;
+    bonus1After: number;
+    bonus2After: number;
+    weekendBonus1: number;
+    weekendBonus2: number;
+    weekendOvertimeAfter: number;
+    publicHolidayBonus: number;
+};
