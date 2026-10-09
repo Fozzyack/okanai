@@ -131,7 +131,17 @@ export default function CalculatePage() {
                 />
             )}
             {step == Steps.SUMMARY && (
-                <Summary weeklyHours={weeklyHours} basePay={basePay} settings={settings} />
+                <Summary
+                    weeklyHours={weeklyHours}
+                    basePay={basePay}
+                    settings={settings}
+                    onStartAgain={() => {
+                        setBasePay("");
+                        setWeeklyHours(init_hours.map((day) => ({ ...day })));
+                        setErrorMsg("");
+                        setStep(Steps.PAY);
+                    }}
+                />
             )}
         </div>
     );

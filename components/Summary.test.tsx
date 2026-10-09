@@ -25,7 +25,8 @@ test("summary displays calculated totals, daily pay, and break costs", () => {
     week[0] = { start: 540, end: 1260, break_time: 60, is_public_holiday: false };
     week[5] = { start: 540, end: 1020, break_time: 0, is_public_holiday: false };
     week[6] = { ...week[5], is_public_holiday: true };
-    const html = renderToStaticMarkup(<Summary weeklyHours={week} basePay="20" settings={settings} />);
+    const html = renderToStaticMarkup(<Summary weeklyHours={week} basePay="20" settings={settings} onStartAgain={() => {}} />);
+    assert.ok(html.includes("Start again"));
     for (const text of ["$790.00", "$260.00", "$290.00", "$240.00", "27h", "$40.00", "Public holiday", "60 min unpaid break", "Normal hours", "Overtime hours"]) {
         assert.ok(html.includes(text), `Missing ${text}`);
     }
@@ -36,7 +37,7 @@ test("summary displays calculated totals, daily pay, and break costs", () => {
 });
 
 test("all-skipped weeks show zero totals without invalid chart heights", () => {
-    const html = renderToStaticMarkup(<Summary weeklyHours={emptyWeek()} basePay="20" settings={settings} />);
+    const html = renderToStaticMarkup(<Summary weeklyHours={emptyWeek()} basePay="20" settings={settings} onStartAgain={() => {}} />);
     assert.ok(html.includes("$0.00"));
     assert.equal(html.match(/Not scheduled/g)?.length, 7);
     assert.ok(!html.includes("NaN"));
@@ -46,12 +47,12 @@ test("all-skipped weeks show zero totals without invalid chart heights", () => {
 test("summary reflects changed settings", () => {
     const week = emptyWeek();
     week[0] = { start: 540, end: 1020, break_time: 0, is_public_holiday: true };
-    const html = renderToStaticMarkup(<Summary weeklyHours={week} basePay="20" settings={{ ...settings, publicHolidayBonus: 2 }} />);
+    const html = renderToStaticMarkup(<Summary weeklyHours={week} basePay="20" settings={{ ...settings, publicHolidayBonus: 2 }} onStartAgain={() => {}} />);
     assert.ok(html.includes("$320.00"));
 });
 
 test("invalid settings show a helpful alert instead of crashing", () => {
-    const html = renderToStaticMarkup(<Summary weeklyHours={emptyWeek()} basePay="20" settings={{ ...settings, bonus2After: 7 }} />);
+    const html = renderToStaticMarkup(<Summary weeklyHours={emptyWeek()} basePay="20" settings={{ ...settings, bonus2After: 7 }} onStartAgain={() => {}} />);
     assert.ok(html.includes('role="alert"'));
     assert.ok(html.includes("Check your settings"));
     assert.ok(html.includes("second overtime threshold cannot precede the first"));
@@ -60,7 +61,7 @@ test("invalid settings show a helpful alert instead of crashing", () => {
 test("summary reflects base-only break deductions", () => {
     const week = emptyWeek();
     week[0] = { start: 540, end: 1200, break_time: 60, is_public_holiday: false };
-    const html = renderToStaticMarkup(<Summary weeklyHours={week} basePay="20" settings={{ ...settings, breaksOnlyDeductBasePay: true }} />);
+    const html = renderToStaticMarkup(<Summary weeklyHours={week} basePay="20" settings={{ ...settings, breaksOnlyDeductBasePay: true }} onStartAgain={() => {}} />);
     assert.ok(html.includes("$240.00"));
     assert.ok(html.includes("$20.00"));
     assert.ok(html.includes("Break cost uses your base rate only"));
