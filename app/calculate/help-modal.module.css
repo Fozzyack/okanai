@@ -1,6 +1,6 @@
 .trigger {
     position: fixed;
-    left: max(24px, env(safe-area-inset-left));
+    right: max(24px, env(safe-area-inset-right));
     bottom: max(24px, env(safe-area-inset-bottom));
     z-index: 10;
     display: grid;
