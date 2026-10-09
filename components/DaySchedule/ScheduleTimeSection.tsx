@@ -34,7 +34,7 @@ const ScheduleTimeSection = ({
     onChangeEnd,
 }: ScheduleTimeSectionProps) => (
     <div className="space-y-6">
-        <div className="grid grid-cols-2 gap-4">
+        <div data-schedule-reveal className="grid grid-cols-2 gap-4">
             {([
                 {
                     name: "start",
@@ -81,7 +81,7 @@ const ScheduleTimeSection = ({
             ))}
         </div>
 
-        <fieldset className="space-y-3">
+        <fieldset data-schedule-reveal className="space-y-3">
             <legend className="text-sm font-semibold text-[#182b51]">
                 Adjust time range
             </legend>
@@ -126,6 +126,7 @@ const ScheduleTimeSection = ({
             </p>
         </fieldset>
         <label
+            data-schedule-reveal
             className={`flex w-full cursor-pointer items-center gap-4 rounded-3xl border-2 px-5 py-4 shadow-[4px_5px_0_#edf2ff] transition-colors ${
                 isPublicHoliday
                     ? "border-[#315de8] bg-[#edf2ff]"

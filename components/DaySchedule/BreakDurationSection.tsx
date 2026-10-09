@@ -18,7 +18,7 @@ const BreakDurationSection = ({
     const [draft, setDraft] = useState<string | null>(null);
 
     return (
-        <div className="space-y-3">
+        <div data-schedule-reveal className="space-y-3">
             <label
                 htmlFor="break-minutes"
                 className="block pl-1 text-sm font-semibold text-[#182b51]"

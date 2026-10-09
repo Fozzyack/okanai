@@ -2,12 +2,16 @@
 
 import type { DayScheduleProps } from "@/types/props";
 import type { hoursWorked } from "@/types/calculate";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { useGSAP } from "@gsap/react";
+import { gsap } from "gsap";
 import { Steps, stepToText } from "@/lib/calculate";
 import StepHeader from "../StepHeader";
 import Button from "../ui/Button";
 import ScheduleTimeSection from "./ScheduleTimeSection";
 import BreakDurationSection from "./BreakDurationSection";
+
+gsap.registerPlugin(useGSAP);
 
 const DaySchedule = ({
     step,
@@ -17,6 +21,7 @@ const DaySchedule = ({
     errMsg,
 }: DayScheduleProps) => {
     const [isBreakSection, setIsBreakSection] = useState(false);
+    const sectionRef = useRef<HTMLDivElement>(null);
     const dayIndex = step - Steps.MONDAY;
     const [draft, setDraft] = useState<hoursWorked>(() => {
         const day = weeklyHours[dayIndex];
@@ -41,6 +46,55 @@ const DaySchedule = ({
     });
     const { start, end } = draft;
     const breakMinutes = draft.break_end - draft.break_start;
+
+    useGSAP(
+        () => {
+            const media = gsap.matchMedia();
+            media.add(
+                "(prefers-reduced-motion: no-preference)",
+                () => {
+                    gsap.timeline({ defaults: { ease: "power3.out" } })
+                        .from("[data-step-header-line]", {
+                            y: 16,
+                            opacity: 0,
+                            duration: 0.55,
+                            stagger: 0.1,
+                            clearProps: "transform,opacity",
+                        })
+                        .from(
+                            "[data-step-header-underline]",
+                            {
+                                scaleX: 0,
+                                transformOrigin: "left center",
+                                duration: 0.45,
+                                ease: "back.out(1.4)",
+                                clearProps: "transform,transformOrigin",
+                            },
+                            0.25,
+                        )
+                        .from(
+                            "[data-schedule-reveal]",
+                            {
+                                y: 14,
+                                opacity: 0,
+                                duration: 0.5,
+                                stagger: 0.08,
+                                clearProps: "transform,opacity",
+                            },
+                            0.2,
+                        );
+                },
+                sectionRef,
+            );
+
+            return () => media.revert();
+        },
+        {
+            scope: sectionRef,
+            dependencies: [step, isBreakSection],
+            revertOnUpdate: true,
+        },
+    );
 
     const updateSchedule = (scheduleStart: number, scheduleEnd: number) => {
         setDraft((previous) => {
@@ -84,7 +138,10 @@ const DaySchedule = ({
     }
 
     return (
-        <div className="mx-auto flex w-[calc(100vw-3rem)] max-w-sm flex-col gap-8 py-12 sm:gap-10">
+        <div
+            ref={sectionRef}
+            className="mx-auto flex w-[calc(100vw-3rem)] max-w-sm flex-col gap-8 py-12 sm:gap-10"
+        >
             <StepHeader
                 text={isBreakSection ? "Set Break for" : "Set Schedule for"}
                 text_highlight={stepToText(step)}
@@ -132,18 +189,19 @@ const DaySchedule = ({
                 {errMsg}
             </p>
 
-            <Button fullWidth onClick={handleNext}>
+            <Button data-schedule-reveal fullWidth onClick={handleNext}>
                 Next
             </Button>
             {isBreakSection && (
                 <Button
+                    data-schedule-reveal
                     variant="ghost"
                     onClick={() => setIsBreakSection(false)}
                 >
                     Back to schedule
                 </Button>
             )}
-            <div className="flex items-center justify-center">
+            <div data-schedule-reveal className="flex items-center justify-center">
                 <Button variant="link" onClick={skipStep}>
                     Skip Day {"->"}
                 </Button>
