@@ -1,7 +1,5 @@
-type StepHeaderProps = {
-    text: string;
-    text_highlight: string;
-};
+import { StepHeaderProps } from "@/types/props";
+
 const StepHeader = ({ text, text_highlight }: StepHeaderProps) => {
     return (
         <h2 className="text-5xl font-bold leading-[1.15] tracking-[-0.045em] text-black sm:text-6xl text-center">

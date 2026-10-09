@@ -32,13 +32,14 @@ const stepToText = (step: number) => {
         case Steps.SUNDAY:
             return "Sunday";
         default:
-            return "";
+            throw new Error("Invalid step");
     }
 };
 
 export default function CalculatePage() {
     const [step, setStep] = useState<number>(Steps.PAY);
     const [basePay, setBasePay] = useState<string>("");
+    const [hoursWorked, setHoursWorked] = useState<>();
     const [errMsg, setErrorMsg] = useState<string>("");
 
     const onChangePay = (amount: string) => {

@@ -4,16 +4,9 @@ import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { useRef } from "react";
 import StepHeader from "./StepHeader";
+import { BasePayInputProps } from "@/types/props";
 
 gsap.registerPlugin(useGSAP);
-
-type BasePayInputProps = {
-    pay: string;
-    errMsg: string;
-
-    onChangePay: (amount: string) => void;
-    onNext: () => void;
-};
 
 const BasePayInput = ({
     pay,
