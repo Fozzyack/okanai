@@ -125,18 +125,33 @@ const ScheduleTimeSection = ({
                 {Math.floor((end - start) / 60)}h {(end - start) % 60}m scheduled
             </p>
         </fieldset>
-        <button
-            type="button"
-            aria-pressed={isPublicHoliday}
-            onClick={onChangePublicHoliday}
-            className={`w-full rounded-3xl border-2 px-6 py-4 text-sm font-bold transition-colors ${
+        <label
+            className={`flex w-full cursor-pointer items-center gap-4 rounded-3xl border-2 px-5 py-4 shadow-[4px_5px_0_#edf2ff] transition-colors ${
                 isPublicHoliday
-                    ? "border-[#315de8] bg-[#315de8] text-white"
-                    : "border-[#315de8]/25 bg-white text-[#315de8] hover:border-[#315de8]"
+                    ? "border-[#315de8] bg-[#edf2ff]"
+                    : "border-[#315de8]/25 bg-white hover:border-[#315de8]/60 hover:bg-[#edf2ff]/50"
             }`}
         >
-            Public holiday: {isPublicHoliday ? "Yes" : "No"}
-        </button>
+            <input
+                type="checkbox"
+                name="is_public_holiday"
+                checked={isPublicHoliday}
+                onChange={onChangePublicHoliday}
+                aria-describedby="schedule-public-holiday-description"
+                className="h-5 w-5 shrink-0 cursor-pointer accent-[#315de8] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#315de8]"
+            />
+            <span className="space-y-1">
+                <span className="block text-sm font-bold text-[#182b51]">
+                    Public holiday
+                </span>
+                <span
+                    id="schedule-public-holiday-description"
+                    className="block text-xs leading-relaxed text-[#65718a]"
+                >
+                    Check this if your shift falls on a public holiday.
+                </span>
+            </span>
+        </label>
     </div>
 );
 

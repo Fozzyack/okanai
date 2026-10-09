@@ -5,6 +5,7 @@ import { isValidBasePay } from "@/lib/BasePay";
 import { hoursWorked } from "@/types/calculate";
 import { init_hours, Steps } from "@/lib/calculate";
 import { useState } from "react";
+import Button from "@/components/ui/Button";
 
 export default function CalculatePage() {
     const [step, setStep] = useState<number>(Steps.PAY);
@@ -55,12 +56,12 @@ export default function CalculatePage() {
         <div className="z-10">
             {step != Steps.PAY && step != Steps.SUMMARY && (
                 <div className="mt-12">
-                    <button
-                        className="underline hover:cursor-pointer"
+                    <Button
+                        variant="secondary"
                         onClick={onPrev}
                     >
-                        {"<- "} previous step
-                    </button>
+                        {"<-"} Back
+                    </Button>
                 </div>
             )}
             {step == Steps.PAY && (

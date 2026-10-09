@@ -136,16 +136,17 @@ const DaySchedule = ({
                 Next
             </Button>
             {isBreakSection && (
-                <button
-                    type="button"
+                <Button
+                    variant="ghost"
                     onClick={() => setIsBreakSection(false)}
-                    className="text-sm font-semibold text-[#315de8] underline underline-offset-4"
                 >
                     Back to schedule
-                </button>
+                </Button>
             )}
             <div className="flex items-center justify-center">
-                <button onClick={skipStep} className="underline hover:cursor-pointer"> Skip Day {"->"} </button>
+                <Button variant="link" onClick={skipStep}>
+                    Skip Day {"->"}
+                </Button>
             </div>
         </div>
     );
