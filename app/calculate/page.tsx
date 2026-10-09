@@ -28,7 +28,18 @@ export default function CalculatePage() {
     const [weekendBonus2, setWeekendBonus2] = useState<number>(2);
     const [weekendOvertimeAfter, setWeekendOvertimeAfter] = useState<number>(3);
 
-    const [publicHolidayBonus, setPublicHolidayBonus] = useState<number>(1.5);
+    const [publicHolidayBonus, setPublicHolidayBonus] = useState<number>(2);
+
+    const settings: PaySettings = {
+        bonusPay1,
+        bonusPay2,
+        bonus1After,
+        bonus2After,
+        weekendBonus1,
+        weekendBonus2,
+        weekendOvertimeAfter,
+        publicHolidayBonus,
+    };
 
     const onChangePay = (amount: string) => {
         setBasePay(amount);
@@ -82,16 +93,7 @@ export default function CalculatePage() {
         <div className="z-10">
             <div className="mt-6 flex justify-end">
                 <SettingsModal
-                    values={{
-                        bonusPay1,
-                        bonusPay2,
-                        bonus1After,
-                        bonus2After,
-                        weekendBonus1,
-                        weekendBonus2,
-                        weekendOvertimeAfter,
-                        publicHolidayBonus,
-                    }}
+                    values={settings}
                     onSave={onSave}
                 />
             </div>
@@ -123,7 +125,9 @@ export default function CalculatePage() {
                     onNext={onNext}
                 />
             )}
-            {step == Steps.SUMMARY && <Summary weeklyHours={weeklyHours} />}
+            {step == Steps.SUMMARY && (
+                <Summary weeklyHours={weeklyHours} basePay={basePay} settings={settings} />
+            )}
         </div>
     );
 }

@@ -13,3 +13,9 @@ export const timeToMinutes = (time: string): number => {
 
 export const clampMinutes = (minutes: number, maxMinutes = LAST_MINUTE): number =>
     Math.min(maxMinutes, Math.max(0, minutes));
+
+export const formatDuration = (minutes: number): string => {
+    const hours = Math.floor(minutes / 60);
+    const remainder = minutes % 60;
+    return remainder === 0 ? `${hours}h` : `${hours}h ${remainder}m`;
+};
