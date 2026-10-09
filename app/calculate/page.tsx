@@ -15,6 +15,27 @@ const Steps = Object.freeze({
     SUMMARY: 8,
 });
 
+const stepToText = (step: number) => {
+    switch (step) {
+        case Steps.MONDAY:
+            return "Monday";
+        case Steps.TUESAY:
+            return "Tuesday";
+        case Steps.WEDNESDAY:
+            return "Wednesday";
+        case Steps.THURSDAY:
+            return "Thursday";
+        case Steps.FRIDAY:
+            return "Friday";
+        case Steps.SATURDAY:
+            return "Saturday";
+        case Steps.SUNDAY:
+            return "Sunday";
+        default:
+            return "";
+    }
+};
+
 export default function CalculatePage() {
     const [step, setStep] = useState<number>(Steps.PAY);
     const [basePay, setBasePay] = useState<string>("");
