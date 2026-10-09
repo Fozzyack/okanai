@@ -14,10 +14,11 @@ export type BasePayInputProps = {
 };
 
 export type DayScheduleProps = {
-    step: number 
-    pay: string 
-    weeklyHours: hoursWorked[]
+    step: number;
+    pay: string;
+    weeklyHours: hoursWorked[];
+    errMsg: string;
 
-    updateWeeklyHours: (index: number, start: number, end: number) => void
-    onNext: () => void
+    updateWeeklyHours: (index: number, start: number, end: number) => void;
+    onNext: () => void;
 };

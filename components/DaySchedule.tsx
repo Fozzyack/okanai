@@ -8,6 +8,7 @@ const DaySchedule = ({
     weeklyHours,
     updateWeeklyHours,
     onNext,
+    errMsg,
 }: DayScheduleProps) => {
     return (
         <div>

@@ -6,11 +6,18 @@ import { hoursWorked } from "@/types/calculate";
 import { Steps } from "@/lib/calculate";
 import { useState } from "react";
 
-
 export default function CalculatePage() {
     const [step, setStep] = useState<number>(Steps.PAY);
     const [basePay, setBasePay] = useState<string>("");
-    const [weeklyHours, setWeeklyHours] = useState<hoursWorked[]>([{start: 0, end: 0}, {start: 0, end: 0}, {start: 0, end: 0}, {start: 0, end: 0}, {start: 0, end: 0}, {start: 0, end: 0}, {start: 0, end: 0}]);
+    const [weeklyHours, setWeeklyHours] = useState<hoursWorked[]>([
+        { start: 0, end: 0 },
+        { start: 0, end: 0 },
+        { start: 0, end: 0 },
+        { start: 0, end: 0 },
+        { start: 0, end: 0 },
+        { start: 0, end: 0 },
+        { start: 0, end: 0 },
+    ]);
     const [errMsg, setErrorMsg] = useState<string>("");
 
     const onChangePay = (amount: string) => {
@@ -22,8 +29,7 @@ export default function CalculatePage() {
         newWeeklyHours[index] = { start: start, end: end };
         setWeeklyHours(newWeeklyHours);
         return;
-    }
-
+    };
 
     const onNext = () => {
         if (step == Steps.PAY && !isValidBasePay(basePay)) {
@@ -49,18 +55,18 @@ export default function CalculatePage() {
                     onNext={onNext}
                 />
             )}
-            { step > Steps.PAY && step < Steps.SUMMARY && (
+            {step > Steps.PAY && step < Steps.SUMMARY && (
                 <DaySchedule
                     step={step}
                     pay={basePay}
                     weeklyHours={weeklyHours}
                     updateWeeklyHours={updateWeeklyHours}
+                    errMsg={errMsg}
                     onNext={onNext}
                 />
             )}
-            )
             {step != Steps.PAY && step != Steps.SUMMARY && (
-                <div>
+                <div className="text-center mt-12">
                     <span>Go back to </span>{" "}
                     <button
                         className="underline hover:cursor-pointer"
