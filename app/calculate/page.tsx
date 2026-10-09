@@ -1,6 +1,7 @@
 "use client";
 import BasePayInput from "@/components/BasePay";
 import DaySchedule from "@/components/DaySchedule";
+import Summary from "@/components/Summary";
 import { isValidBasePay } from "@/lib/BasePay";
 import { hoursWorked } from "@/types/calculate";
 import { init_hours, Steps } from "@/lib/calculate";
@@ -82,6 +83,7 @@ export default function CalculatePage() {
                     onNext={onNext}
                 />
             )}
+            {step == Steps.SUMMARY && <Summary weeklyHours={weeklyHours} />}
         </div>
     );
 }

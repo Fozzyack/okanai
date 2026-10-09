@@ -28,9 +28,11 @@ const DaySchedule = ({
         const isUnset = day.start === 0 && day.end === 0;
         const start = isUnset ? 9 * 60 : day.start;
         const end = isUnset ? 17 * 60 : day.end;
+        const breakSource =
+            isUnset && dayIndex > 0 ? weeklyHours[dayIndex - 1] : day;
         const duration = Math.min(
             end - start,
-            Math.max(0, day.break_end - day.break_start),
+            Math.max(0, breakSource.break_end - breakSource.break_start),
         );
         const breakStart = Math.min(
             end - duration,
