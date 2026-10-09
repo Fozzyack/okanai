@@ -12,12 +12,6 @@
     --font-mono: var(--font-geist-mono);
 }
 
-body {
-    background: var(--background);
-    color: var(--foreground);
-    font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
-}
-
 html {
     scroll-behavior: smooth;
 }
@@ -36,6 +30,7 @@ html {
     html {
         scroll-behavior: auto;
     }
+
     *,
     *::before,
     *::after {
