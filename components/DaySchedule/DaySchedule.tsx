@@ -2,7 +2,7 @@
 
 import type { DayScheduleProps } from "@/types/props";
 import type { hoursWorked } from "@/types/calculate";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { Steps, stepToText } from "@/lib/calculate";
@@ -22,7 +22,8 @@ const DaySchedule = ({
     errMsg,
 }: DayScheduleProps) => {
     const [isBreakSection, setIsBreakSection] = useState(false);
-    const sectionRef = useRef<HTMLDivElement>(null);
+    const sectionRef = useRef<HTMLFormElement>(null);
+    const nextButtonRef = useRef<HTMLButtonElement>(null);
     const dayIndex = step - Steps.MONDAY;
     const [draft, setDraft] = useState<hoursWorked>(() => {
         const day = weeklyHours[dayIndex];
@@ -30,7 +31,10 @@ const DaySchedule = ({
         const previousSchedule = weeklyHours
             .slice(0, dayIndex)
             .reverse()
-            .find((previousDay) => !(previousDay.start === 0 && previousDay.end === 0));
+            .find(
+                (previousDay) =>
+                    !(previousDay.start === 0 && previousDay.end === 0),
+            );
         const start = isUnset ? (previousSchedule?.start ?? 9 * 60) : day.start;
         const end = isUnset ? (previousSchedule?.end ?? 17 * 60) : day.end;
         const breakSource = isUnset ? (previousSchedule ?? day) : day;
@@ -44,24 +48,27 @@ const DaySchedule = ({
     });
     const { start, end } = draft;
 
+    useEffect(() => {
+        nextButtonRef.current?.focus({ preventScroll: true });
+    }, [step, isBreakSection]);
+
     useGSAP(
         () => {
             const media = gsap.matchMedia();
             media.add(
                 "(prefers-reduced-motion: no-preference)",
                 () => {
-                    gsap.timeline({ defaults: { ease: "power3.out" } })
-                        .from(
-                            "[data-schedule-reveal]",
-                            {
-                                y: 14,
-                                opacity: 0,
-                                duration: 0.5,
-                                stagger: 0.08,
-                                clearProps: "transform,opacity",
-                            },
-                            0.2,
-                        );
+                    gsap.timeline({ defaults: { ease: "power3.out" } }).from(
+                        "[data-schedule-reveal]",
+                        {
+                            y: 14,
+                            opacity: 0,
+                            duration: 0.5,
+                            stagger: 0.08,
+                            clearProps: "transform,opacity",
+                        },
+                        0.2,
+                    );
                 },
                 sectionRef,
             );
@@ -112,8 +119,12 @@ const DaySchedule = ({
     };
 
     return (
-        <div
+        <form
             ref={sectionRef}
+            onSubmit={(event) => {
+                event.preventDefault();
+                handleNext();
+            }}
             className="mx-auto flex w-[calc(100vw-3rem)] max-w-sm flex-col gap-8 py-12 sm:gap-10"
         >
             <StepHeader
@@ -153,18 +164,18 @@ const DaySchedule = ({
                     }
                 />
             )}
-            { errMsg != "" &&
-            <p
-                id="schedule-error"
-                aria-live="polite"
-                aria-atomic="true"
-                className="min-h-5 pl-1 text-sm font-medium text-red-600"
-            >
-                {errMsg}
-            </p>
-            }
+            {errMsg != "" && (
+                <p
+                    id="schedule-error"
+                    aria-live="polite"
+                    aria-atomic="true"
+                    className="min-h-5 pl-1 text-sm font-medium text-red-600"
+                >
+                    {errMsg}
+                </p>
+            )}
 
-            <Button data-schedule-reveal fullWidth onClick={handleNext}>
+            <Button ref={nextButtonRef} data-schedule-reveal type="submit" fullWidth>
                 Next
             </Button>
             {isBreakSection && (
@@ -176,12 +187,15 @@ const DaySchedule = ({
                     Back to schedule
                 </Button>
             )}
-            <div data-schedule-reveal className="flex items-center justify-center">
+            <div
+                data-schedule-reveal
+                className="flex items-center justify-center"
+            >
                 <Button variant="link" onClick={skipStep}>
                     Skip Day {"->"}
                 </Button>
             </div>
-        </div>
+        </form>
     );
 };
 

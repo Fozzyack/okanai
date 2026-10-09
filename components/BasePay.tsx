@@ -2,7 +2,7 @@
 
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import StepHeader from "./StepHeader";
 import { BasePayInputProps } from "@/types/props";
 import Button from "./ui/Button";
@@ -16,6 +16,7 @@ const BasePayInput = ({
     errMsg,
 }: BasePayInputProps) => {
     const formRef = useRef<HTMLFormElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
 
     useGSAP(
         () => {
@@ -23,18 +24,17 @@ const BasePayInput = ({
             media.add(
                 "(prefers-reduced-motion: no-preference)",
                 () => {
-                    gsap.timeline({ defaults: { ease: "power3.out" } })
-                        .from(
-                            "[data-pay-reveal]",
-                            {
-                                y: 14,
-                                opacity: 0,
-                                duration: 0.5,
-                                stagger: 0.12,
-                                clearProps: "transform,opacity",
-                            },
-                            0.2,
-                        );
+                    gsap.timeline({ defaults: { ease: "power3.out" } }).from(
+                        "[data-pay-reveal]",
+                        {
+                            y: 14,
+                            opacity: 0,
+                            duration: 0.5,
+                            stagger: 0.12,
+                            clearProps: "transform,opacity",
+                        },
+                        0.2,
+                    );
                 },
                 formRef,
             );
@@ -44,9 +44,18 @@ const BasePayInput = ({
         { scope: formRef },
     );
 
+    useEffect(() => {
+        inputRef.current?.focus({ preventScroll: true });
+    }, []);
+
     return (
         <form
             ref={formRef}
+            noValidate
+            onSubmit={(event) => {
+                event.preventDefault();
+                onNext();
+            }}
             className="mx-auto flex w-[calc(100vw-3rem)] max-w-sm flex-col gap-8 py-12 sm:gap-10"
         >
             <StepHeader text="Enter Base" text_highlight="Pay" />
@@ -60,10 +69,12 @@ const BasePayInput = ({
                 <div className="flex items-center gap-3 rounded-3xl border-2 border-[#315de8]/25 bg-white px-6 py-5 shadow-[4px_5px_0_#edf2ff] duration-200 hover:border-[#315de8]/50 focus-within:border-[#315de8] focus-within:shadow-[4px_5px_0_#dce5ff] focus-within:-translate-y-1 focus-within:scale-105 transition-all">
                     <span className="text-2xl font-bold text-[#315de8]">$</span>
                     <input
+                        ref={inputRef}
                         id="base-pay"
                         value={pay}
                         onChange={(e) => onChangePay(e.target.value)}
                         type="number"
+                        step="0.01"
                         aria-label="Base hourly rate in Australian dollars"
                         aria-invalid={Boolean(errMsg)}
                         aria-describedby={errMsg ? "base-pay-error" : undefined}
@@ -85,7 +96,7 @@ const BasePayInput = ({
                 </p>
             </div>
             <div data-pay-reveal>
-                <Button fullWidth onClick={onNext}>
+                <Button type="submit" fullWidth>
                     Next
                 </Button>
             </div>

@@ -16,10 +16,8 @@ const variantStyles = {
         "bg-[#315de8] text-white shadow-[0_5px_0_#2348ba] hover:bg-[#254cc9] hover:shadow-[0_7px_0_#2348ba] active:shadow-[0_1px_0_#2348ba]",
     secondary:
         "bg-slate-100 text-slate-700 shadow-[0_5px_0_#cbd5e1] hover:bg-slate-200 hover:shadow-[0_7px_0_#cbd5e1] active:shadow-[0_1px_0_#cbd5e1]",
-    ghost:
-        "rounded-xl bg-transparent px-4 py-3 text-sm font-semibold text-[#315de8] hover:bg-blue-50 active:bg-blue-100",
-    link:
-        "rounded-lg bg-transparent px-3 py-3 text-sm font-medium text-slate-500 underline underline-offset-4 hover:text-slate-700 active:text-slate-900",
+    ghost: "rounded-xl bg-transparent px-4 py-3 text-sm font-semibold text-[#315de8] hover:bg-blue-50 active:bg-blue-100",
+    link: "rounded-lg bg-transparent px-3 py-3 text-sm font-medium text-slate-500 underline underline-offset-4 hover:text-slate-700 active:text-slate-900",
 } satisfies Record<NonNullable<ButtonProps["variant"]>, string>;
 
 const Button = ({
@@ -33,9 +31,11 @@ const Button = ({
     return (
         <button
             type={type}
+            style={{ outline: "none" }}
             className={[
                 buttonStyles,
-                (variant === "primary" || variant === "secondary") && raisedButtonStyles,
+                (variant === "primary" || variant === "secondary") &&
+                    raisedButtonStyles,
                 variantStyles[variant],
                 fullWidth && "w-full",
                 className,
