@@ -9,10 +9,24 @@ import { useState } from "react";
 import Button from "@/components/ui/Button";
 
 export default function CalculatePage() {
+    // Variables for main steps
     const [step, setStep] = useState<number>(Steps.PAY);
     const [basePay, setBasePay] = useState<string>("");
     const [weeklyHours, setWeeklyHours] = useState<hoursWorked[]>(init_hours);
     const [errMsg, setErrorMsg] = useState<string>("");
+
+
+    // Variables for settings menu
+    const [bonusPay1, setBonusPay1] = useState<number>(1.5);
+    const [bonusPay2, setBonusPay2] = useState<number>(2);
+    const [bonus1After, setBonus1After] = useState<number>(8);
+    const [bonus2After, setBonus2After] = useState<number>(10);
+
+    const [weekendBonus1, setWeekendBonus1] = useState<number>(1.5);
+    const [weekendBonus2, setWeekendBonus2] = useState<number>(2);
+    const [weekendOvertimeAfter, setWeekendOvertimeAfter] = useState<number>(3);
+
+    const [publicHolidayBonus, setPublicHolidayBonus] = useState<number>(1.5);
 
     const onChangePay = (amount: string) => {
         setBasePay(amount);
