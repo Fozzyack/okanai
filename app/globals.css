@@ -12,12 +12,6 @@
     --font-mono: var(--font-geist-mono);
 }
 
-body {
-    background: var(--background);
-    color: var(--foreground);
-    font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
-}
-
 html {
     scroll-behavior: smooth;
 }
@@ -27,15 +21,18 @@ html {
     color: #182b51;
 }
 
-:focus-visible {
-    outline: 3px solid #315de8;
-    outline-offset: 4px;
+@layer base {
+    :focus-visible {
+        outline: 3px solid #315de8;
+        outline-offset: 4px;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {
     html {
         scroll-behavior: auto;
     }
+
     *,
     *::before,
     *::after {
