@@ -1,9 +1,21 @@
 import { DayScheduleProps } from "@/types/props";
 import { stepToText } from "@/lib/calculate";
+import StepHeader from "./StepHeader";
 
-const DaySchedule = ({ step, pay, weeklyHours, updateWeeklyHours, onNext }: DayScheduleProps) => {
-    return <div>
-        {stepToText(step)}
-    </div>;
-}
+const DaySchedule = ({
+    step,
+    pay,
+    weeklyHours,
+    updateWeeklyHours,
+    onNext,
+}: DayScheduleProps) => {
+    return (
+        <div>
+            <StepHeader
+                text="Set Schedule for"
+                text_highlight={stepToText(step)}
+            />
+        </div>
+    );
+};
 export default DaySchedule;
