@@ -1,41 +1,11 @@
 "use client";
 import BasePayInput from "@/components/BasePay";
+import DaySchedule from "@/components/DaySchedule";
 import { isValidBasePay } from "@/lib/BasePay";
 import { hoursWorked } from "@/types/calculate";
+import { Steps } from "@/lib/calculate";
 import { useState } from "react";
 
-const Steps = Object.freeze({
-    PAY: 0,
-    MONDAY: 1,
-    TUESAY: 2,
-    WEDNESDAY: 3,
-    THURSDAY: 4,
-    FRIDAY: 5,
-    SATURDAY: 6,
-    SUNDAY: 7,
-    SUMMARY: 8,
-});
-
-const stepToText = (step: number) => {
-    switch (step) {
-        case Steps.MONDAY:
-            return "Monday";
-        case Steps.TUESAY:
-            return "Tuesday";
-        case Steps.WEDNESDAY:
-            return "Wednesday";
-        case Steps.THURSDAY:
-            return "Thursday";
-        case Steps.FRIDAY:
-            return "Friday";
-        case Steps.SATURDAY:
-            return "Saturday";
-        case Steps.SUNDAY:
-            return "Sunday";
-        default:
-            throw new Error("Invalid step");
-    }
-};
 
 export default function CalculatePage() {
     const [step, setStep] = useState<number>(Steps.PAY);
@@ -46,6 +16,14 @@ export default function CalculatePage() {
     const onChangePay = (amount: string) => {
         setBasePay(amount);
     };
+
+    const updateWeeklyHours = (index: number, start: number, end: number) => {
+        const newWeeklyHours = [...weeklyHours];
+        newWeeklyHours[index] = { start: start, end: end };
+        setWeeklyHours(newWeeklyHours);
+        return;
+    }
+
 
     const onNext = () => {
         if (step == Steps.PAY && !isValidBasePay(basePay)) {
@@ -71,6 +49,16 @@ export default function CalculatePage() {
                     onNext={onNext}
                 />
             )}
+            { step > Steps.PAY && step < Steps.SUMMARY && (
+                <DaySchedule
+                    step={step}
+                    pay={basePay}
+                    weeklyHours={weeklyHours}
+                    updateWeeklyHours={updateWeeklyHours}
+                    onNext={onNext}
+                />
+            )}
+            )
             {step != Steps.PAY && step != Steps.SUMMARY && (
                 <div>
                     <span>Go back to </span>{" "}

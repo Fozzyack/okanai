@@ -1,8 +1,4 @@
-export type hoursWorked = {
-    start: number,
-    end: number
-}
-const Steps = Object.freeze({
+export const Steps = Object.freeze({
     PAY: 0,
     MONDAY: 1,
     TUESAY: 2,
@@ -14,7 +10,7 @@ const Steps = Object.freeze({
     SUMMARY: 8,
 });
 
-const stepToText = (step: number) => {
+export const stepToText = (step: number) => {
     switch (step) {
         case Steps.MONDAY:
             return "Monday";
