@@ -1,5 +1,4 @@
 import Link from "next/link";
-import CalculatorHelp from "./help-modal";
 
 const CalculateLayout = ({ children }: { children: React.ReactNode }) => {
     return (
@@ -9,9 +8,6 @@ const CalculateLayout = ({ children }: { children: React.ReactNode }) => {
                 <Link href={"/"} className="">
                     {"<-"} Home
                 </Link>
-            </div>
-            <div className="absolute bottom-4 right-4">
-                <CalculatorHelp />
             </div>
             {children}
         </div>

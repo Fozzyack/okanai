@@ -9,6 +9,7 @@ import { useState } from "react";
 import Button from "@/components/ui/Button";
 import SettingsModal from "@/components/SettingsModal";
 import { PaySettings } from "@/types/calculate";
+import CalculatorHelp from "./help-modal";
 
 export default function CalculatePage() {
     // Variables for main steps
@@ -91,6 +92,7 @@ export default function CalculatePage() {
 
     return (
         <div className="z-10">
+            <CalculatorHelp settings={settings} />
             <div className="mt-6 flex justify-end">
                 <SettingsModal
                     values={settings}
