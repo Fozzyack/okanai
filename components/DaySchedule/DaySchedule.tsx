@@ -1,6 +1,7 @@
 "use client";
 
 import type { DayScheduleProps } from "@/types/props";
+import type { hoursWorked } from "@/types/calculate";
 import { useState } from "react";
 import { Steps, stepToText } from "@/lib/calculate";
 import StepHeader from "../StepHeader";
@@ -17,33 +18,62 @@ const DaySchedule = ({
 }: DayScheduleProps) => {
     const [isBreakSection, setIsBreakSection] = useState(false);
     const dayIndex = step - Steps.MONDAY;
-    const day = weeklyHours[dayIndex];
-    const { start, end } = day;
-    const breakMinutes = day.break_end - day.break_start;
-
-    const saveSchedule = (scheduleStart: number, scheduleEnd: number) => {
+    const [draft, setDraft] = useState<hoursWorked>(() => {
+        const day = weeklyHours[dayIndex];
+        const isUnset = day.start === 0 && day.end === 0;
+        const start = isUnset ? 9 * 60 : day.start;
+        const end = isUnset ? 17 * 60 : day.end;
         const duration = Math.min(
-            scheduleEnd - scheduleStart,
-            Math.max(0, breakMinutes),
+            end - start,
+            Math.max(0, day.break_end - day.break_start),
         );
         const breakStart = Math.min(
-            scheduleEnd - duration,
-            Math.max(scheduleStart, day.break_start),
+            end - duration,
+            Math.max(start, day.break_start),
         );
-        updateWeeklyHours(
-            dayIndex,
-            scheduleStart,
-            scheduleEnd,
-            breakStart,
-            breakStart + duration,
-        );
+        return {
+            ...day,
+            start,
+            end,
+            break_start: breakStart,
+            break_end: breakStart + duration,
+        };
+    });
+    const { start, end } = draft;
+    const breakMinutes = draft.break_end - draft.break_start;
+
+    const updateSchedule = (scheduleStart: number, scheduleEnd: number) => {
+        setDraft((previous) => {
+            const duration = Math.min(
+                scheduleEnd - scheduleStart,
+                Math.max(0, previous.break_end - previous.break_start),
+            );
+            const breakStart = Math.min(
+                scheduleEnd - duration,
+                Math.max(scheduleStart, previous.break_start),
+            );
+            return {
+                ...previous,
+                start: scheduleStart,
+                end: scheduleEnd,
+                break_start: breakStart,
+                break_end: breakStart + duration,
+            };
+        });
     };
 
     const handleNext = () => {
         if (isBreakSection) {
+            updateWeeklyHours(
+                dayIndex,
+                draft.start,
+                draft.end,
+                draft.break_start,
+                draft.break_end,
+                draft.is_public_holiday,
+            );
             onNext();
         } else {
-            saveSchedule(start, end);
             setIsBreakSection(true);
         }
     };
@@ -61,13 +91,11 @@ const DaySchedule = ({
                     maxMinutes={end - start}
                     errMsg={errMsg}
                     onChange={(duration) =>
-                        updateWeeklyHours(
-                            dayIndex,
-                            undefined,
-                            undefined,
-                            start,
-                            start + duration,
-                        )
+                        setDraft((previous) => ({
+                            ...previous,
+                            break_start: previous.start,
+                            break_end: previous.start + duration,
+                        }))
                     }
                 />
             ) : (
@@ -75,11 +103,18 @@ const DaySchedule = ({
                     start={start}
                     end={end}
                     errMsg={errMsg}
+                    isPublicHoliday={draft.is_public_holiday}
+                    onChangePublicHoliday={() =>
+                        setDraft((previous) => ({
+                            ...previous,
+                            is_public_holiday: !previous.is_public_holiday,
+                        }))
+                    }
                     onChangeStart={(minutes) =>
-                        saveSchedule(minutes, Math.max(minutes, end))
+                        updateSchedule(minutes, Math.max(minutes, end))
                     }
                     onChangeEnd={(minutes) =>
-                        saveSchedule(Math.min(start, minutes), minutes)
+                        updateSchedule(Math.min(start, minutes), minutes)
                     }
                 />
             )}

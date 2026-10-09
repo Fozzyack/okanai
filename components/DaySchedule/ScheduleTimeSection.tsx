@@ -18,6 +18,8 @@ type ScheduleTimeSectionProps = {
     start: number;
     end: number;
     errMsg: string;
+    isPublicHoliday: boolean;
+    onChangePublicHoliday: () => void;
     onChangeStart: (minutes: number) => void;
     onChangeEnd: (minutes: number) => void;
 };
@@ -26,6 +28,8 @@ const ScheduleTimeSection = ({
     start,
     end,
     errMsg,
+    isPublicHoliday,
+    onChangePublicHoliday,
     onChangeStart,
     onChangeEnd,
 }: ScheduleTimeSectionProps) => (
@@ -121,6 +125,18 @@ const ScheduleTimeSection = ({
                 {Math.floor((end - start) / 60)}h {(end - start) % 60}m scheduled
             </p>
         </fieldset>
+        <button
+            type="button"
+            aria-pressed={isPublicHoliday}
+            onClick={onChangePublicHoliday}
+            className={`w-full rounded-3xl border-2 px-6 py-4 text-sm font-bold transition-colors ${
+                isPublicHoliday
+                    ? "border-[#315de8] bg-[#315de8] text-white"
+                    : "border-[#315de8]/25 bg-white text-[#315de8] hover:border-[#315de8]"
+            }`}
+        >
+            Public holiday: {isPublicHoliday ? "Yes" : "No"}
+        </button>
     </div>
 );
 
