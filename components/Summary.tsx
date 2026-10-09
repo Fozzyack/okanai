@@ -1,15 +1,11 @@
 import type { hoursWorked } from "@/types/calculate";
 import { Steps, stepToText } from "@/lib/calculate";
+import { formatTime } from "@/lib/time";
 import StepHeader from "./StepHeader";
 
 type SummaryProps = {
     weeklyHours: hoursWorked[];
 };
-
-const formatTime = (minutes: number): string =>
-    `${Math.floor(minutes / 60).toString().padStart(2, "0")}:${(minutes % 60)
-        .toString()
-        .padStart(2, "0")}`;
 
 const Summary = ({ weeklyHours }: SummaryProps) => (
     <section className="mx-auto flex w-[calc(100vw-3rem)] max-w-sm flex-col gap-8 py-12 sm:gap-10">

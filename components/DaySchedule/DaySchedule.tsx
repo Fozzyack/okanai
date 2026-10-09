@@ -6,6 +6,7 @@ import { useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { Steps, stepToText } from "@/lib/calculate";
+import { clampMinutes } from "@/lib/time";
 import StepHeader from "../StepHeader";
 import Button from "../ui/Button";
 import ScheduleTimeSection from "./ScheduleTimeSection";
@@ -33,10 +34,7 @@ const DaySchedule = ({
         const start = isUnset ? (previousSchedule?.start ?? 9 * 60) : day.start;
         const end = isUnset ? (previousSchedule?.end ?? 17 * 60) : day.end;
         const breakSource = isUnset ? (previousSchedule ?? day) : day;
-        const duration = Math.min(
-            end - start,
-            Math.max(0, breakSource.break_time),
-        );
+        const duration = clampMinutes(breakSource.break_time, end - start);
         return {
             ...day,
             start,
@@ -79,9 +77,9 @@ const DaySchedule = ({
 
     const updateSchedule = (scheduleStart: number, scheduleEnd: number) => {
         setDraft((previous) => {
-            const duration = Math.min(
+            const duration = clampMinutes(
+                previous.break_time,
                 scheduleEnd - scheduleStart,
-                Math.max(0, previous.break_time),
             );
             return {
                 ...previous,

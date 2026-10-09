@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { clampMinutes } from "@/lib/time";
 
 type BreakDurationSectionProps = {
     minutes: number;
@@ -40,10 +41,7 @@ const BreakDurationSection = ({
                                 ? 0
                                 : event.target.valueAsNumber;
                         if (Number.isFinite(value)) {
-                            const duration = Math.min(
-                                maxMinutes,
-                                Math.max(0, Math.floor(value)),
-                            );
+                            const duration = clampMinutes(Math.floor(value), maxMinutes);
                             setDraft(event.target.value === "" ? "" : null);
                             onChange(duration);
                         }

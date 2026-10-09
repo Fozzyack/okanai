@@ -1,18 +1,7 @@
 "use client";
 
 import styles from "./DaySchedule.module.css";
-
-const LAST_MINUTE = 23 * 60 + 59;
-
-const formatTime = (minutes: number): string =>
-    `${Math.floor(minutes / 60)
-        .toString()
-        .padStart(2, "0")}:${(minutes % 60).toString().padStart(2, "0")}`;
-
-const timeToMinutes = (time: string): number => {
-    const [hours, minutes] = time.split(":").map(Number);
-    return hours * 60 + minutes;
-};
+import { clampMinutes, formatTime, LAST_MINUTE, timeToMinutes } from "@/lib/time";
 
 type ScheduleTimeSectionProps = {
     start: number;
@@ -66,10 +55,7 @@ const ScheduleTimeSection = ({
                         onChange={(event) => {
                             if (event.target.value) {
                                 update(
-                                    Math.min(
-                                        LAST_MINUTE,
-                                        Math.max(0, timeToMinutes(event.target.value)),
-                                    ),
+                                    clampMinutes(timeToMinutes(event.target.value)),
                                 );
                             }
                         }}
