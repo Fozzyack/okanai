@@ -63,6 +63,7 @@ export default function CalculatePage() {
             )}
             {step > Steps.PAY && step < Steps.SUMMARY && (
                 <DaySchedule
+                    key={step}
                     step={step}
                     weeklyHours={weeklyHours}
                     updateWeeklyHours={updateWeeklyHours}

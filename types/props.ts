@@ -18,6 +18,13 @@ export type DayScheduleProps = {
     weeklyHours: hoursWorked[];
     errMsg: string;
 
-    updateWeeklyHours: (index: number, start: number, end: number) => void;
+    updateWeeklyHours: (
+        index: number,
+        start?: number,
+        end?: number,
+        startBreak?: number,
+        endBreak?: number,
+        isPublicHoliday?: boolean,
+    ) => void;
     onNext: () => void;
 };

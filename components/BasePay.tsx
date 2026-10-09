@@ -76,9 +76,7 @@ const BasePayInput = ({
                     Base hourly rate
                 </label>
                 <div className="flex items-center gap-3 rounded-3xl border-2 border-[#315de8]/25 bg-white px-6 py-5 shadow-[4px_5px_0_#edf2ff] duration-200 hover:border-[#315de8]/50 focus-within:border-[#315de8] focus-within:shadow-[4px_5px_0_#dce5ff] focus-within:-translate-y-1 focus-within:scale-105 transition-all">
-                    <span className="-rotate-6 text-2xl font-bold text-[#315de8]">
-                        $
-                    </span>
+                    <span className="text-2xl font-bold text-[#315de8]">$</span>
                     <input
                         id="base-pay"
                         value={pay}
