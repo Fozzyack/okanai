@@ -117,7 +117,7 @@ const DaySchedule = ({
             className="mx-auto flex w-[calc(100vw-3rem)] max-w-sm flex-col gap-8 py-12 sm:gap-10"
         >
             <StepHeader
-                text={isBreakSection ? "Set Break for" : "Set Schedule for"}
+                text={isBreakSection ? "Break for" : "Schedule for"}
                 text_highlight={stepToText(step)}
             />
 
@@ -153,6 +153,7 @@ const DaySchedule = ({
                     }
                 />
             )}
+            { errMsg != "" &&
             <p
                 id="schedule-error"
                 aria-live="polite"
@@ -161,6 +162,7 @@ const DaySchedule = ({
             >
                 {errMsg}
             </p>
+            }
 
             <Button data-schedule-reveal fullWidth onClick={handleNext}>
                 Next

@@ -96,22 +96,22 @@ export default function CalculatePage() {
     return (
         <div className="z-10">
             <CalculatorHelp settings={settings} />
-            <div className="mt-6 flex justify-end">
-                <SettingsModal
-                    values={settings}
-                    onSave={onSave}
-                />
-            </div>
-            {step != Steps.PAY && (
-                <div className="mt-12">
+            <div className="mt-6 flex items-center justify-between gap-4">
+                {step != Steps.PAY && (
                     <Button
                         variant="secondary"
                         onClick={onPrev}
                     >
                         {"<-"} Back
                     </Button>
+                )}
+                <div className="ml-auto">
+                    <SettingsModal
+                        values={settings}
+                        onSave={onSave}
+                    />
                 </div>
-            )}
+            </div>
             {step == Steps.PAY && (
                 <BasePayInput
                     pay={basePay}

@@ -54,7 +54,7 @@ const BreakDurationSection = ({
                     MIN
                 </span>
             </div>
-            <p id="break-help" className="pl-1 text-sm text-[#65718a]">
+            <p id="break-help" className="pl-1 text-sm text-[#65718a] text-center">
                 Enter 0 for no break. Maximum: {maxMinutes} minutes.
             </p>
         </div>
