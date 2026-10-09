@@ -93,7 +93,7 @@ const Summary = (props: SummaryProps) => {
                 <>
                     <div data-summary-reveal className="grid gap-5 sm:grid-cols-2">
                         <div className="relative overflow-hidden rounded-3xl bg-[#315de8] p-6 text-white shadow-[0_6px_0_#2348ba] sm:p-7">
-                            <div aria-hidden="true" className="absolute -right-10 -top-10 h-40 w-40 rounded-full border-[24px] border-white/5" />
+                            <div aria-hidden="true" className="absolute -right-10 -top-10 h-40 w-40 rounded-full border-[24px] border-[#f7d9e5]/20" />
                             <p className="relative text-xs font-semibold uppercase tracking-[0.16em] text-blue-100">Estimated weekly pay</p>
                             <p className="relative mt-4 break-all text-4xl font-bold leading-tight tabular-nums tracking-[-0.045em] sm:text-5xl">
                                 {currency.format(summary.totalPay)}
@@ -105,7 +105,7 @@ const Summary = (props: SummaryProps) => {
                             </div>
                         </div>
 
-                        <div className="rounded-3xl border-2 border-[#315de8]/15 bg-[#fffaf8] p-6 shadow-[4px_5px_0_#edf2ff]">
+                        <div className="rounded-3xl border-2 border-[#315de8]/15 bg-[#fffaf8] p-6 shadow-[4px_5px_0_#f7d9e5]">
                             <div className="flex items-center justify-between gap-3">
                                 <h3 className="text-sm font-bold text-[#182b51]">Daily earnings</h3>
                                 <span className="text-xs font-medium text-[#65718a]">Mon–Sun</span>
@@ -133,7 +133,7 @@ const Summary = (props: SummaryProps) => {
                             { label: "Days scheduled", value: `${summary.daysWorked} / 7`, note: "Across your week" },
                             { label: "Unpaid break cost", value: currency.format(summary.breakLoss), note: "Compared with no breaks" },
                         ].map(({ label, value, note }) => (
-                            <div key={label} className="rounded-2xl border border-[#315de8]/15 bg-white p-4">
+                            <div key={label} className={`rounded-2xl border p-4 ${label === "Paid hours" ? "border-[#efb2cd]/50 bg-[#fff2f7]" : "border-[#315de8]/15 bg-white"}`}>
                                 <dt className="text-xs font-medium text-[#65718a]">{label}</dt>
                                 <dd className="mt-2 break-words text-xl font-bold tabular-nums tracking-tight text-[#182b51] sm:text-2xl">{value}</dd>
                                 <dd className="mt-1 text-[11px] leading-relaxed text-[#65718a]">{note}</dd>
@@ -142,9 +142,8 @@ const Summary = (props: SummaryProps) => {
                     </dl>
 
                     <div data-summary-reveal className="overflow-hidden rounded-3xl border-2 border-[#315de8]/15 bg-white shadow-[4px_5px_0_#edf2ff]">
-                        <div className="flex items-center justify-between gap-3 bg-[#fffaf8] px-5 py-5 sm:px-6">
+                        <div className="flex items-center justify-between gap-3 px-5 py-5 sm:px-6 border-b border-[#315de8]/15">
                             <h3 className="text-lg font-bold tracking-tight text-[#182b51]">The daily breakdown</h3>
-                            <span className="rounded-full bg-[#edf2ff] px-3 py-1 text-xs font-semibold text-[#315de8]">7 days</span>
                         </div>
                         <ul className="divide-y divide-[#182b51]/8">
                             {summary.days.map((day) => (
@@ -168,14 +167,14 @@ const Summary = (props: SummaryProps) => {
                                             {day.isScheduled && <p className="mt-1 text-xs text-[#65718a]">{formatDuration(day.paidMinutes)} paid</p>}
                                         </div>
                                     </div>
-                                    <dl className="mt-3 flex flex-wrap gap-2 text-xs">
-                                        <div className="flex items-center gap-2 rounded-lg bg-[#edf2ff] px-3 py-2">
+                                    <dl className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-[#65718a]">
+                                        <div className="flex items-center gap-2">
                                             <dt className="text-[#65718a]">Normal hours</dt>
-                                            <dd className="font-semibold tabular-nums text-[#315de8]">{hourNumber.format(day.hours.normalHours)}h</dd>
+                                            <dd className="tabular-nums">{hourNumber.format(day.hours.normalHours)}h</dd>
                                         </div>
-                                        <div className="flex items-center gap-2 rounded-lg bg-[#fff2f7] px-3 py-2">
+                                        <div className="flex items-center gap-2">
                                             <dt className="text-[#65718a]">Overtime hours</dt>
-                                            <dd className="font-semibold tabular-nums text-[#763c55]">{hourNumber.format(day.hours.overtimeHours)}h</dd>
+                                            <dd className="tabular-nums">{hourNumber.format(day.hours.overtimeHours)}h</dd>
                                         </div>
                                     </dl>
                                     {day.isScheduled && (
