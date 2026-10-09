@@ -1,6 +1,7 @@
 import { DayScheduleProps } from "@/types/props";
 import { stepToText } from "@/lib/calculate";
 import StepHeader from "./StepHeader";
+import Button from "./ui/Button";
 
 const DaySchedule = ({
     step,
@@ -16,6 +17,10 @@ const DaySchedule = ({
                 text="Set Schedule for"
                 text_highlight={stepToText(step)}
             />
+
+            <Button fullWidth onClick={onNext}>
+                Next
+            </Button>
         </div>
     );
 };

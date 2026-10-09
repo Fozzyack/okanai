@@ -15,7 +15,6 @@ export type BasePayInputProps = {
 
 export type DayScheduleProps = {
     step: number;
-    pay: string;
     weeklyHours: hoursWorked[];
     errMsg: string;
 
