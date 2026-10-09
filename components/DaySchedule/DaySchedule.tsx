@@ -26,15 +26,13 @@ const DaySchedule = ({
     const [draft, setDraft] = useState<hoursWorked>(() => {
         const day = weeklyHours[dayIndex];
         const isUnset = day.start === 0 && day.end === 0;
-        const previousDay = dayIndex > 0 ? weeklyHours[dayIndex - 1] : undefined;
-        const previousSchedule =
-            previousDay && !(previousDay.start === 0 && previousDay.end === 0)
-                ? previousDay
-                : undefined;
+        const previousSchedule = weeklyHours
+            .slice(0, dayIndex)
+            .reverse()
+            .find((previousDay) => !(previousDay.start === 0 && previousDay.end === 0));
         const start = isUnset ? (previousSchedule?.start ?? 9 * 60) : day.start;
         const end = isUnset ? (previousSchedule?.end ?? 17 * 60) : day.end;
-        const breakSource =
-            isUnset && dayIndex > 0 ? weeklyHours[dayIndex - 1] : day;
+        const breakSource = isUnset ? (previousSchedule ?? day) : day;
         const duration = Math.min(
             end - start,
             Math.max(0, breakSource.break_time),
@@ -111,8 +109,9 @@ const DaySchedule = ({
 
     const skipStep = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
+        updateWeeklyHours(dayIndex, 0, 0, 0, false);
         onNext();
-    }
+    };
 
     return (
         <div
