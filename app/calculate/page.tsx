@@ -22,16 +22,14 @@ export default function CalculatePage() {
         index: number,
         start?: number,
         end?: number,
-        startBreak?: number,
-        endBreak?: number,
+        breakTime?: number,
         isPublicHoliday?: boolean,
     ) => {
         const newWeeklyHours = [...weeklyHours];
         newWeeklyHours[index] = {
             start: start ?? newWeeklyHours[index].start,
             end: end ?? newWeeklyHours[index].end,
-            break_start: startBreak ?? newWeeklyHours[index].break_start,
-            break_end: endBreak ?? newWeeklyHours[index].break_end,
+            break_time: breakTime ?? newWeeklyHours[index].break_time,
             is_public_holiday:
                 isPublicHoliday ?? newWeeklyHours[index].is_public_holiday,
         };

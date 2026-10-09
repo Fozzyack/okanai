@@ -35,9 +35,9 @@ const Summary = ({ weeklyHours }: SummaryProps) => (
                         <div className="flex items-baseline justify-between gap-4">
                             <dt className="text-[#65718a]">Break</dt>
                             <dd className="text-right font-semibold tabular-nums">
-                                {day.break_start === day.break_end
+                                {day.break_time === 0
                                     ? "No break"
-                                    : `${formatTime(day.break_start)} – ${formatTime(day.break_end)}`}
+                                    : `${day.break_time} min`}
                             </dd>
                         </div>
                         <div className="flex items-baseline justify-between gap-4">

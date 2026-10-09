@@ -32,22 +32,16 @@ const DaySchedule = ({
             isUnset && dayIndex > 0 ? weeklyHours[dayIndex - 1] : day;
         const duration = Math.min(
             end - start,
-            Math.max(0, breakSource.break_end - breakSource.break_start),
-        );
-        const breakStart = Math.min(
-            end - duration,
-            Math.max(start, day.break_start),
+            Math.max(0, breakSource.break_time),
         );
         return {
             ...day,
             start,
             end,
-            break_start: breakStart,
-            break_end: breakStart + duration,
+            break_time: duration,
         };
     });
     const { start, end } = draft;
-    const breakMinutes = draft.break_end - draft.break_start;
 
     useGSAP(
         () => {
@@ -84,18 +78,13 @@ const DaySchedule = ({
         setDraft((previous) => {
             const duration = Math.min(
                 scheduleEnd - scheduleStart,
-                Math.max(0, previous.break_end - previous.break_start),
-            );
-            const breakStart = Math.min(
-                scheduleEnd - duration,
-                Math.max(scheduleStart, previous.break_start),
+                Math.max(0, previous.break_time),
             );
             return {
                 ...previous,
                 start: scheduleStart,
                 end: scheduleEnd,
-                break_start: breakStart,
-                break_end: breakStart + duration,
+                break_time: duration,
             };
         });
     };
@@ -106,8 +95,7 @@ const DaySchedule = ({
                 dayIndex,
                 draft.start,
                 draft.end,
-                draft.break_start,
-                draft.break_end,
+                draft.break_time,
                 draft.is_public_holiday,
             );
             onNext();
@@ -133,14 +121,13 @@ const DaySchedule = ({
 
             {isBreakSection ? (
                 <BreakDurationSection
-                    minutes={breakMinutes}
+                    minutes={draft.break_time}
                     maxMinutes={end - start}
                     errMsg={errMsg}
                     onChange={(duration) =>
                         setDraft((previous) => ({
                             ...previous,
-                            break_start: previous.start,
-                            break_end: previous.start + duration,
+                            break_time: duration,
                         }))
                     }
                 />

@@ -22,8 +22,7 @@ export type DayScheduleProps = {
         index: number,
         start?: number,
         end?: number,
-        startBreak?: number,
-        endBreak?: number,
+        breakTime?: number,
         isPublicHoliday?: boolean,
     ) => void;
     onNext: () => void;
