@@ -26,8 +26,13 @@ const DaySchedule = ({
     const [draft, setDraft] = useState<hoursWorked>(() => {
         const day = weeklyHours[dayIndex];
         const isUnset = day.start === 0 && day.end === 0;
-        const start = isUnset ? 9 * 60 : day.start;
-        const end = isUnset ? 17 * 60 : day.end;
+        const previousDay = dayIndex > 0 ? weeklyHours[dayIndex - 1] : undefined;
+        const previousSchedule =
+            previousDay && !(previousDay.start === 0 && previousDay.end === 0)
+                ? previousDay
+                : undefined;
+        const start = isUnset ? (previousSchedule?.start ?? 9 * 60) : day.start;
+        const end = isUnset ? (previousSchedule?.end ?? 17 * 60) : day.end;
         const breakSource =
             isUnset && dayIndex > 0 ? weeklyHours[dayIndex - 1] : day;
         const duration = Math.min(
