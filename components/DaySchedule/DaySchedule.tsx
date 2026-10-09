@@ -78,6 +78,11 @@ const DaySchedule = ({
         }
     };
 
+    const skipStep = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        onNext();
+    }
+
     return (
         <div className="mx-auto flex w-[calc(100vw-3rem)] max-w-sm flex-col gap-8 py-12 sm:gap-10">
             <StepHeader
@@ -139,6 +144,9 @@ const DaySchedule = ({
                     Back to schedule
                 </button>
             )}
+            <div className="flex items-center justify-center">
+                <button onClick={skipStep} className="underline hover:cursor-pointer"> Skip Day {"->"} </button>
+            </div>
         </div>
     );
 };

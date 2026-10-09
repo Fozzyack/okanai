@@ -53,6 +53,16 @@ export default function CalculatePage() {
 
     return (
         <div className="z-10">
+            {step != Steps.PAY && step != Steps.SUMMARY && (
+                <div className="mt-12">
+                    <button
+                        className="underline hover:cursor-pointer"
+                        onClick={onPrev}
+                    >
+                        {"<- "} previous step
+                    </button>
+                </div>
+            )}
             {step == Steps.PAY && (
                 <BasePayInput
                     pay={basePay}
@@ -70,18 +80,6 @@ export default function CalculatePage() {
                     errMsg={errMsg}
                     onNext={onNext}
                 />
-            )}
-            {step != Steps.PAY && step != Steps.SUMMARY && (
-                <div className="text-center mt-12">
-                    <span>Go back to </span>{" "}
-                    <button
-                        className="underline hover:cursor-pointer"
-                        onClick={onPrev}
-                    >
-                        {" "}
-                        previous step{" "}
-                    </button>
-                </div>
             )}
         </div>
     );
