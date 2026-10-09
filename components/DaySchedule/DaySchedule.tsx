@@ -49,7 +49,9 @@ const DaySchedule = ({
     const { start, end } = draft;
 
     useEffect(() => {
-        nextButtonRef.current?.focus({ preventScroll: true });
+        if (!isBreakSection) {
+            nextButtonRef.current?.focus({ preventScroll: true });
+        }
     }, [step, isBreakSection]);
 
     useGSAP(
