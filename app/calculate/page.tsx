@@ -18,7 +18,6 @@ export default function CalculatePage() {
     const [weeklyHours, setWeeklyHours] = useState<hoursWorked[]>(init_hours);
     const [errMsg, setErrorMsg] = useState<string>("");
 
-
     // Variables for settings menu
     const [bonusPay1, setBonusPay1] = useState<number>(1.5);
     const [bonusPay2, setBonusPay2] = useState<number>(2);
@@ -30,7 +29,8 @@ export default function CalculatePage() {
     const [weekendOvertimeAfter, setWeekendOvertimeAfter] = useState<number>(3);
 
     const [publicHolidayBonus, setPublicHolidayBonus] = useState<number>(2);
-    const [breaksOnlyDeductBasePay, setBreaksOnlyDeductBasePay] = useState(false);
+    const [breaksOnlyDeductBasePay, setBreaksOnlyDeductBasePay] =
+        useState(false);
 
     const settings: PaySettings = {
         bonusPay1,
@@ -93,23 +93,24 @@ export default function CalculatePage() {
         setBreaksOnlyDeductBasePay(settings.breaksOnlyDeductBasePay);
     };
 
+    const startAgain = () => {
+        setBasePay("");
+        setWeeklyHours(init_hours.map((day) => ({ ...day })));
+        setErrorMsg("");
+        setStep(Steps.PAY);
+    };
+
     return (
         <div className="z-10">
             <CalculatorHelp settings={settings} />
             <div className="mt-6 flex items-center justify-between gap-4">
                 {step != Steps.PAY && (
-                    <Button
-                        variant="secondary"
-                        onClick={onPrev}
-                    >
+                    <Button variant="secondary" onClick={onPrev}>
                         {"<-"} Back
                     </Button>
                 )}
                 <div className="ml-auto">
-                    <SettingsModal
-                        values={settings}
-                        onSave={onSave}
-                    />
+                    <SettingsModal values={settings} onSave={onSave} />
                 </div>
             </div>
             {step == Steps.PAY && (
@@ -135,12 +136,7 @@ export default function CalculatePage() {
                     weeklyHours={weeklyHours}
                     basePay={basePay}
                     settings={settings}
-                    onStartAgain={() => {
-                        setBasePay("");
-                        setWeeklyHours(init_hours.map((day) => ({ ...day })));
-                        setErrorMsg("");
-                        setStep(Steps.PAY);
-                    }}
+                    onStartAgain={startAgain}
                 />
             )}
         </div>
