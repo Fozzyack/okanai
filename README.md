@@ -1,6 +1,6 @@
 # Okanai
 
-A lightweight landing page for a weekly gross-pay calculator concept.
+A weekly gross-pay calculator with daily shifts, unpaid breaks, and configurable overtime, weekend, and public-holiday rates.
 
 Built with Next.js, React, TypeScript, Tailwind CSS, and GSAP.
 
@@ -15,9 +15,12 @@ bun install --frozen-lockfile
 bun run dev
 ```
 
-Open [localhost:3000](http://localhost:3000). The calculator route is currently an empty placeholder.
+Open [localhost:3000/calculate](http://localhost:3000/calculate) to estimate your weekly pay and view daily earnings and hours. Entries stay in memory and reset on reload.
+
+Estimates are in AUD, before tax, and exclude superannuation and award-specific rules.
 
 ## Commands
 
 - Build: `bun run build`
 - Serve the build: `bun run start`
+- Tests: `bun test`
