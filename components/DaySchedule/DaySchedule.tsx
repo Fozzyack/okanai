@@ -54,24 +54,6 @@ const DaySchedule = ({
                 "(prefers-reduced-motion: no-preference)",
                 () => {
                     gsap.timeline({ defaults: { ease: "power3.out" } })
-                        .from("[data-step-header-line]", {
-                            y: 16,
-                            opacity: 0,
-                            duration: 0.55,
-                            stagger: 0.1,
-                            clearProps: "transform,opacity",
-                        })
-                        .from(
-                            "[data-step-header-underline]",
-                            {
-                                scaleX: 0,
-                                transformOrigin: "left center",
-                                duration: 0.45,
-                                ease: "back.out(1.4)",
-                                clearProps: "transform,transformOrigin",
-                            },
-                            0.25,
-                        )
                         .from(
                             "[data-schedule-reveal]",
                             {
