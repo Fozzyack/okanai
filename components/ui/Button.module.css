@@ -1,0 +1,33 @@
+.button {
+    position: relative;
+    --focus-shadow-depth: 0px;
+}
+
+.raised {
+    --focus-shadow-depth: 7px;
+}
+
+.raised:active {
+    --focus-shadow-depth: 1px;
+}
+
+.button:focus-visible {
+    outline: none;
+}
+
+.button:focus-visible::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    bottom: calc(0px - var(--focus-shadow-depth));
+    border-radius: inherit;
+    box-shadow: 0 0 0 4px #f7d9e5;
+    pointer-events: none;
+}
+
+@media (forced-colors: active) {
+    .button:focus-visible::after {
+        box-shadow: none;
+        outline: 4px solid Highlight;
+    }
+}
