@@ -9,7 +9,9 @@ import styles from "./DaySchedule.module.css";
 const LAST_MINUTE = 23 * 60 + 59;
 
 const formatTime = (minutes: number): string =>
-    `${Math.floor(minutes / 60).toString().padStart(2, "0")}:${(minutes % 60).toString().padStart(2, "0")}`;
+    `${Math.floor(minutes / 60)
+        .toString()
+        .padStart(2, "0")}:${(minutes % 60).toString().padStart(2, "0")}`;
 
 const timeToMinutes = (time: string): number => {
     const [hours, minutes] = time.split(":").map(Number);
@@ -43,10 +45,22 @@ const DaySchedule = ({
 
             <div className="space-y-6">
                 <div className="grid grid-cols-2 gap-4">
-                    {([
-                        { name: "start", label: "Start time", value: start, update: updateStart },
-                        { name: "end", label: "End time", value: end, update: updateEnd },
-                    ] as const).map(({ name, label, value, update }) => (
+                    {(
+                        [
+                            {
+                                name: "start",
+                                label: "Start time",
+                                value: start,
+                                update: updateStart,
+                            },
+                            {
+                                name: "end",
+                                label: "End time",
+                                value: end,
+                                update: updateEnd,
+                            },
+                        ] as const
+                    ).map(({ name, label, value, update }) => (
                         <div key={name} className="min-w-0 space-y-3">
                             <label
                                 htmlFor={`schedule-${name}`}
@@ -63,11 +77,15 @@ const DaySchedule = ({
                                 value={formatTime(value)}
                                 onChange={(event) => {
                                     if (event.target.value) {
-                                        update(timeToMinutes(event.target.value));
+                                        update(
+                                            timeToMinutes(event.target.value),
+                                        );
                                     }
                                 }}
                                 aria-invalid={Boolean(errMsg)}
-                                aria-describedby={errMsg ? "schedule-error" : undefined}
+                                aria-describedby={
+                                    errMsg ? "schedule-error" : undefined
+                                }
                                 className="w-full min-w-0 rounded-3xl border-2 border-[#315de8]/25 bg-white px-3 py-5 text-lg font-medium tabular-nums text-[#182b51] shadow-[4px_5px_0_#edf2ff] focus:border-[#315de8]"
                             />
                         </div>
@@ -93,7 +111,9 @@ const DaySchedule = ({
                             max={LAST_MINUTE}
                             step={1}
                             value={start}
-                            onChange={(event) => updateStart(Number(event.target.value))}
+                            onChange={(event) =>
+                                updateStart(Number(event.target.value))
+                            }
                             aria-label="Start time"
                             aria-valuetext={formatTime(start)}
                             className={styles.range}
@@ -104,7 +124,9 @@ const DaySchedule = ({
                             max={LAST_MINUTE}
                             step={1}
                             value={end}
-                            onChange={(event) => updateEnd(Number(event.target.value))}
+                            onChange={(event) =>
+                                updateEnd(Number(event.target.value))
+                            }
                             aria-label="End time"
                             aria-valuetext={formatTime(end)}
                             className={styles.range}
@@ -115,7 +137,8 @@ const DaySchedule = ({
                         <span>23:59</span>
                     </div>
                     <p className="text-center text-sm font-medium text-[#182b51]">
-                        {Math.floor((end - start) / 60)}h {(end - start) % 60}m scheduled
+                        {Math.floor((end - start) / 60)}h {(end - start) % 60}m
+                        scheduled
                     </p>
                 </fieldset>
                 <p
