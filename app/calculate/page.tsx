@@ -3,21 +3,13 @@ import BasePayInput from "@/components/BasePay";
 import DaySchedule from "@/components/DaySchedule";
 import { isValidBasePay } from "@/lib/BasePay";
 import { hoursWorked } from "@/types/calculate";
-import { Steps } from "@/lib/calculate";
+import { init_hours, Steps } from "@/lib/calculate";
 import { useState } from "react";
 
 export default function CalculatePage() {
     const [step, setStep] = useState<number>(Steps.PAY);
     const [basePay, setBasePay] = useState<string>("");
-    const [weeklyHours, setWeeklyHours] = useState<hoursWorked[]>([
-        { start: 540, end: 1020, break_start: 0, break_end: 0 },
-        { start: 540, end: 1020, break_start: 0, break_end: 0 },
-        { start: 540, end: 1020, break_start: 0, break_end: 0 },
-        { start: 540, end: 1020, break_start: 0, break_end: 0 },
-        { start: 540, end: 1020, break_start: 0, break_end: 0 },
-        { start: 540, end: 1020, break_start: 0, break_end: 0 },
-        { start: 540, end: 1020, break_start: 0, break_end: 0 },
-    ]);
+    const [weeklyHours, setWeeklyHours] = useState<hoursWorked[]>(init_hours);
     const [errMsg, setErrorMsg] = useState<string>("");
 
     const onChangePay = (amount: string) => {
@@ -30,6 +22,7 @@ export default function CalculatePage() {
         end?: number,
         startBreak?: number,
         endBreak?: number,
+        isPublicHoliday?: boolean,
     ) => {
         const newWeeklyHours = [...weeklyHours];
         newWeeklyHours[index] = {
@@ -37,6 +30,8 @@ export default function CalculatePage() {
             end: end ?? newWeeklyHours[index].end,
             break_start: startBreak ?? newWeeklyHours[index].break_start,
             break_end: endBreak ?? newWeeklyHours[index].break_end,
+            is_public_holiday:
+                isPublicHoliday ?? newWeeklyHours[index].is_public_holiday,
         };
         setWeeklyHours(newWeeklyHours);
         return;

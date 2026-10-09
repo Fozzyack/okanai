@@ -1,3 +1,5 @@
+import { hoursWorked } from "@/types/calculate";
+
 export const Steps = Object.freeze({
     PAY: 0,
     MONDAY: 1,
@@ -30,3 +32,55 @@ export const stepToText = (step: number) => {
             throw new Error("Invalid step");
     }
 };
+
+export let init_hours: hoursWorked[] = [
+    {
+        start: 540,
+        end: 1020,
+        break_start: 0,
+        break_end: 0,
+        is_public_holiday: false,
+    },
+    {
+        start: 540,
+        end: 1020,
+        break_start: 0,
+        break_end: 0,
+        is_public_holiday: false,
+    },
+    {
+        start: 540,
+        end: 1020,
+        break_start: 0,
+        break_end: 0,
+        is_public_holiday: false,
+    },
+    {
+        start: 540,
+        end: 1020,
+        break_start: 0,
+        break_end: 0,
+        is_public_holiday: false,
+    },
+    {
+        start: 540,
+        end: 1020,
+        break_start: 0,
+        break_end: 0,
+        is_public_holiday: false,
+    },
+    {
+        start: 540,
+        end: 1020,
+        break_start: 0,
+        break_end: 0,
+        is_public_holiday: false,
+    },
+    {
+        start: 540,
+        end: 1020,
+        break_start: 0,
+        break_end: 0,
+        is_public_holiday: false,
+    },
+];

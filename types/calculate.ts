@@ -4,4 +4,5 @@ export type hoursWorked = {
     end: number;
     break_start: number;
     break_end: number;
+    is_public_holiday: boolean;
 };
