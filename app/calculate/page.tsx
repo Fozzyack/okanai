@@ -1,6 +1,7 @@
 "use client";
 import BasePayInput from "@/components/BasePay";
 import { isValidBasePay } from "@/lib/BasePay";
+import { hoursWorked } from "@/types/calculate";
 import { useState } from "react";
 
 const Steps = Object.freeze({
@@ -39,7 +40,7 @@ const stepToText = (step: number) => {
 export default function CalculatePage() {
     const [step, setStep] = useState<number>(Steps.PAY);
     const [basePay, setBasePay] = useState<string>("");
-    const [hoursWorked, setHoursWorked] = useState<>();
+    const [weeklyHours, setWeeklyHours] = useState<hoursWorked[]>([{start: 0, end: 0}, {start: 0, end: 0}, {start: 0, end: 0}, {start: 0, end: 0}, {start: 0, end: 0}, {start: 0, end: 0}, {start: 0, end: 0}]);
     const [errMsg, setErrorMsg] = useState<string>("");
 
     const onChangePay = (amount: string) => {

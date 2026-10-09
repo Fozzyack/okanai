@@ -1,3 +1,10 @@
+import { hoursWorked } from "./calculate";
+
+export type StepHeaderProps = {
+    text: string;
+    text_highlight: string;
+};
+
 export type BasePayInputProps = {
     pay: string;
     errMsg: string;
@@ -6,7 +13,11 @@ export type BasePayInputProps = {
     onNext: () => void;
 };
 
-export type StepHeaderProps = {
-    text: string;
-    text_highlight: string;
+export type DayScheduleProps = {
+    step: number 
+    pay: string 
+    weeklyHours: hoursWorked[]
+
+    updateWeeklyHours: (index: number, start: number, end: number) => void
+    onNext: () => void
 };
