@@ -1,7 +1,7 @@
 import { strict as assert } from "node:assert";
 import { test } from "node:test";
 import type { hoursWorked, PaySettings } from "../types/calculate";
-import { calculateBreakLoss, calculateDailyPay, calculateWeeklyPay } from "./pay";
+import { calculateBreakLoss, calculateDailyHours, calculateDailyPay, calculateWeeklyPay } from "./pay";
 
 const settings: PaySettings = {
     bonusPay1: 1.5,
@@ -98,4 +98,34 @@ test("daily functions reject invalid day indexes and breaks", () => {
         assert.throws(() => calculateBreakLoss("20", day, index, settings), RangeError);
     }
     assert.throws(() => calculateBreakLoss("20", { ...day, break_time: -1 }, 0, settings), RangeError);
+});
+
+test("daily hours exclude breaks and split both weekday overtime tiers", () => {
+    const day = { start: 540, end: 1260, break_time: 60, is_public_holiday: false };
+    assert.deepEqual(calculateDailyHours(day, 0, settings), {
+        paidHours: 11, normalHours: 8, overtimeHours: 3, overtime1Hours: 2, overtime2Hours: 1,
+    });
+    assert.equal(calculateDailyHours({ ...day, break_time: 240 }, 0, settings).overtimeHours, 0);
+});
+
+test("daily hours follow weekend and holiday pay rules", () => {
+    const day = { start: 540, end: 1020, break_time: 0, is_public_holiday: false };
+    assert.deepEqual(calculateDailyHours(day, 5, settings), {
+        paidHours: 8, normalHours: 3, overtimeHours: 5, overtime1Hours: 5, overtime2Hours: 0,
+    });
+    assert.deepEqual(calculateDailyHours({ ...day, is_public_holiday: true }, 6, settings), {
+        paidHours: 8, normalHours: 8, overtimeHours: 0, overtime1Hours: 0, overtime2Hours: 0,
+    });
+});
+
+test("daily hours support fractional thresholds, skipped days, and validation", () => {
+    const day = { start: 540, end: 1110, break_time: 30, is_public_holiday: false };
+    const hours = calculateDailyHours(day, 0, { ...settings, bonus1After: 7.5, bonus2After: 8.5 });
+    assert.deepEqual(hours, {
+        paidHours: 9, normalHours: 7.5, overtimeHours: 1.5, overtime1Hours: 1, overtime2Hours: 0.5,
+    });
+    assert.equal(hours.normalHours + hours.overtimeHours, hours.paidHours);
+    assert.equal(calculateDailyHours(emptyWeek()[0], 0, settings).paidHours, 0);
+    assert.throws(() => calculateDailyHours(day, 7, settings), RangeError);
+    assert.throws(() => calculateDailyHours({ ...day, break_time: 1000 }, 0, settings), RangeError);
 });

@@ -43,6 +43,51 @@ const validateAmount = (amount: number): number => {
     return amount;
 };
 
+export type DailyHours = {
+    paidHours: number;
+    normalHours: number;
+    overtimeHours: number;
+    overtime1Hours: number;
+    overtime2Hours: number;
+};
+
+/**
+ * Split paid hours into the same tiers used for daily pay, excluding breaks.
+ * Weekend normal hours use the first weekend rate; weekend overtime uses the
+ * second rate. Holidays have only holiday-rate hours, classified as normal.
+ * dayIndex is 0 (Monday) through 6 (Sunday). Values are unrounded hours.
+ */
+export const calculateDailyHours = (
+    day: hoursWorked,
+    dayIndex: number,
+    settings: PaySettings,
+): DailyHours => {
+    validateSettings(settings);
+    validateDay(day, dayIndex);
+
+    const paidHours = (day.end - day.start - day.break_time) / 60;
+    let normalHours: number;
+    let overtime1Hours = 0;
+    let overtime2Hours = 0;
+    if (day.is_public_holiday) {
+        normalHours = paidHours;
+    } else if (dayIndex >= 5) {
+        normalHours = Math.min(paidHours, settings.weekendOvertimeAfter);
+        overtime1Hours = paidHours - normalHours;
+    } else {
+        normalHours = Math.min(paidHours, settings.bonus1After);
+        overtime1Hours = Math.max(0, Math.min(paidHours, settings.bonus2After) - normalHours);
+        overtime2Hours = Math.max(0, paidHours - settings.bonus2After);
+    }
+    return {
+        paidHours,
+        normalHours,
+        overtimeHours: overtime1Hours + overtime2Hours,
+        overtime1Hours,
+        overtime2Hours,
+    };
+};
+
 /**
  * Gross pay after unpaid breaks, using daily paid-hour overtime thresholds.
  * dayIndex is 0 (Monday) through 6 (Sunday); holidays replace other rates.
@@ -56,23 +101,17 @@ export const calculateDailyPay = (
     settings: PaySettings,
 ): number => {
     const hourlyRate = parseBasePay(basePay);
-    validateSettings(settings);
-    validateDay(day, dayIndex);
+    const hours = calculateDailyHours(day, dayIndex, settings);
 
-    const hours = (day.end - day.start - day.break_time) / 60;
     let weightedHours: number;
     if (day.is_public_holiday) {
-        weightedHours = hours * settings.publicHolidayBonus;
+        weightedHours = hours.paidHours * settings.publicHolidayBonus;
     } else if (dayIndex >= 5) {
-        const firstTier = Math.min(hours, settings.weekendOvertimeAfter);
-        weightedHours = firstTier * settings.weekendBonus1 +
-            (hours - firstTier) * settings.weekendBonus2;
+        weightedHours = hours.normalHours * settings.weekendBonus1 +
+            hours.overtimeHours * settings.weekendBonus2;
     } else {
-        const regular = Math.min(hours, settings.bonus1After);
-        const firstTier = Math.max(0, Math.min(hours, settings.bonus2After) - regular);
-        const secondTier = Math.max(0, hours - settings.bonus2After);
-        weightedHours = regular + firstTier * settings.bonusPay1 +
-            secondTier * settings.bonusPay2;
+        weightedHours = hours.normalHours + hours.overtime1Hours * settings.bonusPay1 +
+            hours.overtime2Hours * settings.bonusPay2;
     }
     return validateAmount(weightedHours * hourlyRate);
 };

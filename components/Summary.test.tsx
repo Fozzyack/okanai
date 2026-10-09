@@ -25,10 +25,13 @@ test("summary displays calculated totals, daily pay, and break costs", () => {
     week[5] = { start: 540, end: 1020, break_time: 0, is_public_holiday: false };
     week[6] = { ...week[5], is_public_holiday: true };
     const html = renderToStaticMarkup(<Summary weeklyHours={week} basePay="20" settings={settings} />);
-    for (const text of ["$790.00", "$260.00", "$290.00", "$240.00", "27h", "$40.00", "Public holiday", "60 min unpaid break"]) {
+    for (const text of ["$790.00", "$260.00", "$290.00", "$240.00", "27h", "$40.00", "Public holiday", "60 min unpaid break", "Normal hours", "Overtime hours"]) {
         assert.ok(html.includes(text), `Missing ${text}`);
     }
     assert.ok(html.includes('aria-label="Monday: $260.00"'));
+    assert.match(html, /Normal hours<\/dt><dd[^>]*>8h<\/dd>/);
+    assert.match(html, /Overtime hours<\/dt><dd[^>]*>3h<\/dd>/);
+    assert.match(html, /Overtime hours<\/dt><dd[^>]*>5h<\/dd>/);
 });
 
 test("all-skipped weeks show zero totals without invalid chart heights", () => {

@@ -5,7 +5,7 @@ import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import type { hoursWorked, PaySettings } from "@/types/calculate";
 import { Steps, stepToText } from "@/lib/calculate";
-import { calculateBreakLoss, calculateDailyPay, calculateWeeklyPay } from "@/lib/pay";
+import { calculateBreakLoss, calculateDailyHours, calculateDailyPay, calculateWeeklyPay } from "@/lib/pay";
 import { formatDuration, formatTime } from "@/lib/time";
 import StepHeader from "./StepHeader";
 
@@ -22,6 +22,8 @@ const currency = new Intl.NumberFormat("en-AU", {
     currency: "AUD",
 });
 
+const hourNumber = new Intl.NumberFormat("en-AU", { maximumFractionDigits: 2 });
+
 const getSummary = ({ weeklyHours, basePay, settings }: SummaryProps) => {
     try {
         const totalPay = calculateWeeklyPay(basePay, weeklyHours, settings);
@@ -30,6 +32,7 @@ const getSummary = ({ weeklyHours, basePay, settings }: SummaryProps) => {
             name: stepToText(Steps.MONDAY + index),
             pay: calculateDailyPay(basePay, day, index, settings),
             breakLoss: calculateBreakLoss(basePay, day, index, settings),
+            hours: calculateDailyHours(day, index, settings),
             paidMinutes: day.end - day.start - day.break_time,
             isScheduled: day.start !== day.end,
             isWeekend: index >= 5,
@@ -165,6 +168,16 @@ const Summary = (props: SummaryProps) => {
                                             {day.isScheduled && <p className="mt-1 text-xs text-[#65718a]">{formatDuration(day.paidMinutes)} paid</p>}
                                         </div>
                                     </div>
+                                    <dl className="mt-3 flex flex-wrap gap-2 text-xs">
+                                        <div className="flex items-center gap-2 rounded-lg bg-[#edf2ff] px-3 py-2">
+                                            <dt className="text-[#65718a]">Normal hours</dt>
+                                            <dd className="font-semibold tabular-nums text-[#315de8]">{hourNumber.format(day.hours.normalHours)}h</dd>
+                                        </div>
+                                        <div className="flex items-center gap-2 rounded-lg bg-[#fff2f7] px-3 py-2">
+                                            <dt className="text-[#65718a]">Overtime hours</dt>
+                                            <dd className="font-semibold tabular-nums text-[#763c55]">{hourNumber.format(day.hours.overtimeHours)}h</dd>
+                                        </div>
+                                    </dl>
                                     {day.isScheduled && (
                                         <div className="mt-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 text-xs text-[#65718a]">
                                             <span>{day.break_time > 0 ? `${day.break_time} min unpaid break` : "No unpaid break"}</span>
@@ -181,6 +194,7 @@ const Summary = (props: SummaryProps) => {
                     </div>
                     <p className="px-2 text-center text-xs leading-relaxed text-[#65718a]">
                         An estimate based on your entered rates. Breaks are unpaid, and public-holiday rates replace other rates.
+                        Normal hours include the first weekend tier and all public-holiday hours; the remaining paid hours are overtime.
                         Daily amounts are displayed to cents; the weekly total is rounded once, so a small difference may occur.
                     </p>
                 </>

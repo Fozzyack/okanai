@@ -140,6 +140,7 @@ const SettingsModal = ({ values, onSave }: SettingsModalProps) => {
                                                 min={unit === "×" ? 0.01 : 0}
                                                 step="any"
                                                 defaultValue={values[name]}
+                                                style={{outline: "none"}}
                                                 className="w-full min-w-0 bg-transparent text-2xl font-medium tabular-nums outline-none"
                                             />
                                             <span className="shrink-0 text-xs font-semibold text-[#65718a]">{unit}</span>
