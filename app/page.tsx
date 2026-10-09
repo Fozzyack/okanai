@@ -146,7 +146,7 @@ export default function Home() {
                     <div
                         data-hero-illustration
                         className="relative isolate mx-auto flex min-h-[450px] w-full max-w-[570px] items-center justify-center sm:min-h-[510px]"
-                        aria-label="Illustrative pay card with an example estimated gross pay of 1,632.35 AUD"
+                        aria-label="Illustrative pay card: 8 hours on Sunday at 25 AUD per hour, with the first 3 hours at 1.5 times and the remaining 5 hours at 2 times, totaling 362.50 AUD gross pay"
                     >
                         <div className="absolute inset-x-2 inset-y-6 -z-10 rounded-[48%_48%_42%_42%] bg-[#f6dce6] sm:inset-x-4" />
                         <div className="absolute left-1 top-14 h-24 w-24 rounded-full border-[20px] border-[#cbdcf8] sm:-left-3 sm:h-32 sm:w-32" />
@@ -238,8 +238,8 @@ export default function Home() {
                                 </p>
                                 <div className="mt-1 flex items-end justify-between">
                                     <p className="text-[42px] font-semibold leading-tight tracking-[-2px] text-[#315de8]">
-                                        $1,632
-                                        <span className="text-[27px]">.35</span>
+                                        $362
+                                        <span className="text-[27px]">.50</span>
                                     </p>
                                     <span className="mb-2 text-[10px] text-[#65718a]">
                                         AUD
@@ -247,7 +247,7 @@ export default function Home() {
                                 </div>
                             </div>
                             <p className="mt-4 text-center text-[10px] text-[#65718a]">
-                                An example estimate. Before tax & deductions.
+                                3h × $37.50 + 5h × $50.00. Before tax & deductions.
                             </p>
                         </div>
 
