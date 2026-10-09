@@ -6,6 +6,10 @@ Built with Next.js, React, TypeScript, Tailwind CSS, and GSAP.
 
 ![Okanai calculator screenshot](assets/screenshot.png)
 
+## Calculator walkthrough
+
+![Calculator walkthrough showing pay entry, daily shifts, breaks, and the weekly summary](assets/calculator-walkthrough.gif)
+
 ## Run locally
 
 Requires Bun 1.2.22 and Node.js 20.9+.
