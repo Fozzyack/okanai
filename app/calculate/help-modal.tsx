@@ -6,6 +6,7 @@ import styles from "./help-modal.module.css";
 
 export default function CalculatorHelp({ settings }: { settings: PaySettings }) {
     const dialog = useRef<HTMLDialogElement>(null);
+    const thresholdHours = settings.breaksOnlyDeductBasePay ? "shift hours" : "paid hours";
 
     return (
         <>
@@ -120,17 +121,20 @@ export default function CalculatorHelp({ settings }: { settings: PaySettings }) 
                         <h3>Your current pay rules</h3>
                         <p>
                             Monday–Friday: normal hours pay 1× your base rate up
-                            to {settings.bonus1After} paid hours per day. Hours
+                            to {settings.bonus1After} {thresholdHours} per day. Hours
                             after {settings.bonus1After} and up to {settings.bonus2After} pay{" "}
                             {settings.bonusPay1}×; hours beyond {settings.bonus2After} pay{" "}
                             {settings.bonusPay2}×.
                         </p>
                         <p>
-                            Saturday and Sunday: the first {settings.weekendOvertimeAfter} paid
-                            hours per day pay {settings.weekendBonus1}× and are
+                            Saturday and Sunday: the first {settings.weekendOvertimeAfter} {thresholdHours}
+                            {" "}per day pay {settings.weekendBonus1}× and are
                             shown as normal hours. Remaining paid hours pay{" "}
                             {settings.weekendBonus2}× and are shown as overtime.
-                            Thresholds apply per day, not across the week.
+                            Thresholds apply per day, not across the week.{" "}
+                            {settings.breaksOnlyDeductBasePay
+                                ? "For pay calculations, thresholds use the full shift before the base-rate break deduction. Hour breakdowns still use hours excluding breaks."
+                                : "Thresholds use paid hours after subtracting breaks."}
                         </p>
                     </section>
                     <section>
@@ -145,13 +149,15 @@ export default function CalculatorHelp({ settings }: { settings: PaySettings }) 
                             reduces a break that no longer fits.
                         </p>
                         <p>
-                            Unpaid breaks are subtracted before applying daily
-                            overtime thresholds. Break cost is the difference
-                            between the same shift’s pay with and without its
-                            break, including any change in overtime tiers. Pay
-                            totals already exclude breaks; don’t subtract their
-                            cost again. Daily amounts are displayed to cents,
-                            while the weekly total is rounded only once.
+                            {settings.breaksOnlyDeductBasePay
+                                ? "Breaks only deduct base pay is on. Calculate the full shift’s pay using its applicable rates, then deduct break hours × your base hourly rate. Overtime, weekend, and holiday multipliers do not increase that deduction. The deduction is capped at the full shift’s pay so the result cannot be negative."
+                                : "Breaks only deduct base pay is off. Unpaid breaks are subtracted before applying daily overtime thresholds. Break cost is the difference between the same shift’s pay with and without its break, including any change in overtime tiers."}
+                        </p>
+                        <p>
+                            Pay totals already include the break deduction;
+                            don’t subtract its cost again. Daily amounts are
+                            displayed to cents, while the weekly total is
+                            rounded only once.
                         </p>
                     </section>
                     <section>

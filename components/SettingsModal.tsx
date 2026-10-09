@@ -12,7 +12,7 @@ type SettingsModalProps = {
 
 const groups: {
     title: string;
-    fields: { name: keyof PaySettings; label: string; unit: "×" | "hours" }[];
+    fields: { name: Exclude<keyof PaySettings, "breaksOnlyDeductBasePay">; label: string; unit: "×" | "hours" }[];
 }[] = [
     {
         title: "Weekday overtime",
@@ -109,6 +109,7 @@ const SettingsModal = ({ values, onSave }: SettingsModalProps) => {
                                 settings[name] = value;
                             }
                         }
+                        settings.breaksOnlyDeductBasePay = data.has("breaksOnlyDeductBasePay");
                         onSave(settings);
                         setIsOpen(false);
                     }}
@@ -150,6 +151,25 @@ const SettingsModal = ({ values, onSave }: SettingsModalProps) => {
                             </div>
                         </fieldset>
                     ))}
+                    <fieldset className="space-y-3">
+                        <legend className="mb-3 text-sm font-bold text-[#315de8]">Unpaid breaks</legend>
+                        <label className="flex cursor-pointer items-start gap-3 rounded-2xl border-2 border-[#315de8]/25 bg-white p-4 shadow-[3px_4px_0_#edf2ff] transition-colors hover:border-[#315de8]/50 focus-within:border-[#315de8]">
+                            <input
+                                type="checkbox"
+                                name="breaksOnlyDeductBasePay"
+                                defaultChecked={values.breaksOnlyDeductBasePay}
+                                aria-describedby="settings-break-rule-description"
+                                className="mt-0.5 h-5 w-5 shrink-0 cursor-pointer accent-[#315de8]"
+                            />
+                            <span>
+                                <span className="block text-sm font-semibold">Breaks only deduct base pay</span>
+                                <span id="settings-break-rule-description" className="mt-1 block text-xs leading-relaxed text-[#65718a]">
+                                    When checked, calculate the full shift’s pay, then deduct break hours at your base rate only.
+                                    Otherwise, subtract breaks before applying overtime and special rates.
+                                </span>
+                            </span>
+                        </label>
+                    </fieldset>
                     <div className="flex flex-col-reverse gap-3 border-t border-[#315de8]/15 pt-6 sm:flex-row sm:justify-end">
                         <Button variant="secondary" onClick={() => setIsOpen(false)}>Cancel</Button>
                         <Button type="submit">Save settings</Button>

@@ -13,6 +13,7 @@ const settings: PaySettings = {
     weekendBonus2: 2.4,
     weekendOvertimeAfter: 2.5,
     publicHolidayBonus: 3,
+    breaksOnlyDeductBasePay: false,
 };
 
 const helpText = (values: PaySettings): string => renderToStaticMarkup(
@@ -46,4 +47,12 @@ test("help matches skip, break, and holiday behavior", () => {
     assert.ok(text.includes("All paid holiday hours are shown as normal hours"));
     assert.ok(!text.includes("15-minute increments"));
     assert.ok(!text.includes("regular 1× hours first"));
+});
+
+test("help explains enabled base-only break deductions", () => {
+    const text = helpText({ ...settings, breaksOnlyDeductBasePay: true });
+    assert.ok(text.includes("Breaks only deduct base pay is on"));
+    assert.ok(text.includes("deduct break hours × your base hourly rate"));
+    assert.ok(text.includes("up to 6 shift hours per day"));
+    assert.ok(!text.includes("Breaks only deduct base pay is off"));
 });

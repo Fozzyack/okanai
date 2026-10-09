@@ -30,6 +30,7 @@ export default function CalculatePage() {
     const [weekendOvertimeAfter, setWeekendOvertimeAfter] = useState<number>(3);
 
     const [publicHolidayBonus, setPublicHolidayBonus] = useState<number>(2);
+    const [breaksOnlyDeductBasePay, setBreaksOnlyDeductBasePay] = useState(false);
 
     const settings: PaySettings = {
         bonusPay1,
@@ -40,6 +41,7 @@ export default function CalculatePage() {
         weekendBonus2,
         weekendOvertimeAfter,
         publicHolidayBonus,
+        breaksOnlyDeductBasePay,
     };
 
     const onChangePay = (amount: string) => {
@@ -75,7 +77,7 @@ export default function CalculatePage() {
     };
 
     const onPrev = () => {
-        if (step == Steps.PAY || step == Steps.SUMMARY) return;
+        if (step == Steps.PAY) return;
         setStep(step - 1);
     };
 
@@ -88,6 +90,7 @@ export default function CalculatePage() {
         setWeekendBonus2(settings.weekendBonus2);
         setWeekendOvertimeAfter(settings.weekendOvertimeAfter);
         setPublicHolidayBonus(settings.publicHolidayBonus);
+        setBreaksOnlyDeductBasePay(settings.breaksOnlyDeductBasePay);
     };
 
     return (
@@ -99,7 +102,7 @@ export default function CalculatePage() {
                     onSave={onSave}
                 />
             </div>
-            {step != Steps.PAY && step != Steps.SUMMARY && (
+            {step != Steps.PAY && (
                 <div className="mt-12">
                     <Button
                         variant="secondary"

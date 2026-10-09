@@ -13,6 +13,7 @@ const settings: PaySettings = {
     weekendBonus2: 2,
     weekendOvertimeAfter: 3,
     publicHolidayBonus: 1.5,
+    breaksOnlyDeductBasePay: false,
 };
 
 const emptyWeek = (): hoursWorked[] => Array.from({ length: 7 }, () => ({
@@ -54,4 +55,13 @@ test("invalid settings show a helpful alert instead of crashing", () => {
     assert.ok(html.includes('role="alert"'));
     assert.ok(html.includes("Check your settings"));
     assert.ok(html.includes("second overtime threshold cannot precede the first"));
+});
+
+test("summary reflects base-only break deductions", () => {
+    const week = emptyWeek();
+    week[0] = { start: 540, end: 1200, break_time: 60, is_public_holiday: false };
+    const html = renderToStaticMarkup(<Summary weeklyHours={week} basePay="20" settings={{ ...settings, breaksOnlyDeductBasePay: true }} />);
+    assert.ok(html.includes("$240.00"));
+    assert.ok(html.includes("$20.00"));
+    assert.ok(html.includes("Break cost uses your base rate only"));
 });

@@ -12,6 +12,7 @@ const settings: PaySettings = {
     weekendBonus2: 2,
     weekendOvertimeAfter: 3,
     publicHolidayBonus: 1.5,
+    breaksOnlyDeductBasePay: false,
 };
 
 const emptyWeek = (): hoursWorked[] => Array.from({ length: 7 }, () => ({
@@ -128,4 +129,42 @@ test("daily hours support fractional thresholds, skipped days, and validation", 
     assert.equal(calculateDailyHours(emptyWeek()[0], 0, settings).paidHours, 0);
     assert.throws(() => calculateDailyHours(day, 7, settings), RangeError);
     assert.throws(() => calculateDailyHours({ ...day, break_time: 1000 }, 0, settings), RangeError);
+});
+
+test("base-only breaks deduct the base rate on weekdays, weekends, and holidays", () => {
+    const baseOnly = { ...settings, breaksOnlyDeductBasePay: true };
+    const day = { start: 540, end: 1200, break_time: 60, is_public_holiday: false };
+    assert.equal(calculateDailyPay("20", day, 0, baseOnly), 240);
+    assert.equal(calculateBreakLoss("20", day, 0, baseOnly), 20);
+    assert.equal(calculateDailyPay("20", day, 5, baseOnly), 390);
+    assert.equal(calculateBreakLoss("20", day, 5, baseOnly), 20);
+    assert.equal(calculateDailyPay("20", { ...day, is_public_holiday: true }, 0, baseOnly), 310);
+    assert.equal(calculateBreakLoss("20", { ...day, is_public_holiday: true }, 0, baseOnly), 20);
+    assert.equal(calculateDailyPay("20", day, 0, settings), 220);
+    assert.equal(calculateBreakLoss("20", day, 0, settings), 40);
+    assert.deepEqual(calculateDailyHours(day, 0, baseOnly), calculateDailyHours(day, 0, settings));
+});
+
+test("weekly totals honor base-only breaks and keep the input unchanged", () => {
+    const week = emptyWeek();
+    week[0] = { start: 540, end: 1200, break_time: 60, is_public_holiday: false };
+    week[5] = { ...week[0] };
+    week[6] = { ...week[0], is_public_holiday: true };
+    const before = structuredClone(week);
+    assert.equal(calculateWeeklyPay("20", week, { ...settings, breaksOnlyDeductBasePay: true }), 940);
+    assert.deepEqual(week, before);
+});
+
+test("base-only deductions handle zero, fractional-hour, and entire-shift breaks", () => {
+    const baseOnly = { ...settings, breaksOnlyDeductBasePay: true };
+    const day = { start: 540, end: 600, break_time: 15, is_public_holiday: false };
+    assert.equal(calculateDailyPay("20", day, 0, baseOnly), 15);
+    assert.equal(calculateBreakLoss("20", day, 0, baseOnly), 5);
+    assert.equal(calculateBreakLoss("20", { ...day, break_time: 0 }, 0, baseOnly), 0);
+    assert.equal(calculateDailyPay("20", { ...day, break_time: 60 }, 0, baseOnly), 0);
+    const lowerRate = { ...baseOnly, publicHolidayBonus: 0.5 };
+    const holiday = { ...day, break_time: 60, is_public_holiday: true };
+    assert.equal(calculateDailyPay("20", holiday, 0, lowerRate), 0);
+    assert.equal(calculateBreakLoss("20", holiday, 0, lowerRate), 10);
+    assert.throws(() => calculateDailyPay("20", { ...day, break_time: 61 }, 0, baseOnly), RangeError);
 });

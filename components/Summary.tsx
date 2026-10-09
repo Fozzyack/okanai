@@ -192,7 +192,10 @@ const Summary = (props: SummaryProps) => {
                         </div>
                     </div>
                     <p className="px-2 text-center text-xs leading-relaxed text-[#65718a]">
-                        An estimate based on your entered rates. Breaks are unpaid, and public-holiday rates replace other rates.
+                        An estimate based on your entered rates. Public-holiday rates replace other rates.{" "}
+                        {props.settings.breaksOnlyDeductBasePay
+                            ? "Break cost uses your base rate only, deducted from the full shift’s pay and capped at that pay. Hour breakdowns still exclude breaks. "
+                            : "Breaks are unpaid and subtracted before applying pay tiers. "}
                         Normal hours include the first weekend tier and all public-holiday hours; the remaining paid hours are overtime.
                         Daily amounts are displayed to cents; the weekly total is rounded once, so a small difference may occur.
                     </p>

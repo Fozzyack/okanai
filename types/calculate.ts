@@ -16,4 +16,5 @@ export type PaySettings = {
     weekendBonus2: number;
     weekendOvertimeAfter: number;
     publicHolidayBonus: number;
+    breaksOnlyDeductBasePay: boolean;
 };

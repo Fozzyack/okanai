@@ -18,6 +18,9 @@ const validateSettings = (settings: PaySettings): void => {
     if (settings.bonus2After < settings.bonus1After) {
         throw new RangeError("The second overtime threshold cannot precede the first.");
     }
+    if (typeof settings.breaksOnlyDeductBasePay !== "boolean") {
+        throw new RangeError("Breaks only deduct base pay must be a boolean.");
+    }
 
 };
 
@@ -52,7 +55,8 @@ export type DailyHours = {
 };
 
 /**
- * Split paid hours into the same tiers used for daily pay, excluding breaks.
+ * Split paid hours into daily hour tiers, excluding breaks.
+ * This hour breakdown is independent of the break-pay deduction setting.
  * Weekend normal hours use the first weekend rate; weekend overtime uses the
  * second rate. Holidays have only holiday-rate hours, classified as normal.
  * dayIndex is 0 (Monday) through 6 (Sunday). Values are unrounded hours.
@@ -89,7 +93,9 @@ export const calculateDailyHours = (
 };
 
 /**
- * Gross pay after unpaid breaks, using daily paid-hour overtime thresholds.
+ * Gross pay after unpaid breaks. By default, thresholds apply to paid hours.
+ * With base-only break deductions, apply rates to the full shift first, then
+ * deduct break hours at the base rate, capped at the full shift's gross pay.
  * dayIndex is 0 (Monday) through 6 (Sunday); holidays replace other rates.
  * Returns an unrounded amount so weekly totals can be rounded just once.
  * Throws RangeError for invalid pay, settings, or schedule entries.
@@ -101,7 +107,12 @@ export const calculateDailyPay = (
     settings: PaySettings,
 ): number => {
     const hourlyRate = parseBasePay(basePay);
-    const hours = calculateDailyHours(day, dayIndex, settings);
+    validateDay(day, dayIndex);
+    const hours = calculateDailyHours(
+        settings.breaksOnlyDeductBasePay ? { ...day, break_time: 0 } : day,
+        dayIndex,
+        settings,
+    );
 
     let weightedHours: number;
     if (day.is_public_holiday) {
@@ -113,12 +124,16 @@ export const calculateDailyPay = (
         weightedHours = hours.normalHours + hours.overtime1Hours * settings.bonusPay1 +
             hours.overtime2Hours * settings.bonusPay2;
     }
-    return validateAmount(weightedHours * hourlyRate);
+    const grossPay = validateAmount(weightedHours * hourlyRate);
+    const deduction = settings.breaksOnlyDeductBasePay ? day.break_time / 60 * hourlyRate : 0;
+    return validateAmount(Math.max(0, grossPay - deduction));
 };
 
 /**
  * Unrounded pay lost to the day's unpaid break compared with the same shift
- * without a break. Includes any change to overtime tiers; does not mutate day.
+ * without a break. Uses either tier-aware or base-only deductions, according to
+ * settings; base-only deductions cannot exceed the shift's gross pay.
+ * Does not mutate day.
  */
 export const calculateBreakLoss = (
     basePay: string,
@@ -128,6 +143,9 @@ export const calculateBreakLoss = (
 ): number => {
     const paid = calculateDailyPay(basePay, day, dayIndex, settings);
     const withoutBreak = calculateDailyPay(basePay, { ...day, break_time: 0 }, dayIndex, settings);
+    if (settings.breaksOnlyDeductBasePay) {
+        return validateAmount(Math.min(withoutBreak, day.break_time / 60 * parseBasePay(basePay)));
+    }
     return validateAmount(withoutBreak - paid);
 };
 
