@@ -10,13 +10,13 @@ export default function CalculatePage() {
     const [step, setStep] = useState<number>(Steps.PAY);
     const [basePay, setBasePay] = useState<string>("");
     const [weeklyHours, setWeeklyHours] = useState<hoursWorked[]>([
-        { start: 0, end: 0 },
-        { start: 0, end: 0 },
-        { start: 0, end: 0 },
-        { start: 0, end: 0 },
-        { start: 0, end: 0 },
-        { start: 0, end: 0 },
-        { start: 0, end: 0 },
+        { start: 540, end: 1020, break_start: 0, break_end: 0 },
+        { start: 540, end: 1020, break_start: 0, break_end: 0 },
+        { start: 540, end: 1020, break_start: 0, break_end: 0 },
+        { start: 540, end: 1020, break_start: 0, break_end: 0 },
+        { start: 540, end: 1020, break_start: 0, break_end: 0 },
+        { start: 540, end: 1020, break_start: 0, break_end: 0 },
+        { start: 540, end: 1020, break_start: 0, break_end: 0 },
     ]);
     const [errMsg, setErrorMsg] = useState<string>("");
 
@@ -24,9 +24,20 @@ export default function CalculatePage() {
         setBasePay(amount);
     };
 
-    const updateWeeklyHours = (index: number, start: number, end: number) => {
+    const updateWeeklyHours = (
+        index: number,
+        start?: number,
+        end?: number,
+        startBreak?: number,
+        endBreak?: number,
+    ) => {
         const newWeeklyHours = [...weeklyHours];
-        newWeeklyHours[index] = { start: start, end: end };
+        newWeeklyHours[index] = {
+            start: start ?? newWeeklyHours[index].start,
+            end: end ?? newWeeklyHours[index].end,
+            break_start: startBreak ?? newWeeklyHours[index].break_start,
+            break_end: endBreak ?? newWeeklyHours[index].break_end,
+        };
         setWeeklyHours(newWeeklyHours);
         return;
     };
