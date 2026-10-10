@@ -242,7 +242,7 @@ const Summary = (props: SummaryProps) => {
                         data-summary-reveal
                         className="overflow-hidden rounded-3xl border-2 border-[#315de8]/15 bg-white shadow-[4px_5px_0_#edf2ff]"
                     >
-                        <div className="flex items-center justify-between gap-3 px-5 py-5 sm:px-6 border-b border-[#315de8]/15">
+                        <div className="flex items-center justify-between gap-3 bg-[#edf2ff] px-5 py-5 sm:px-6 border-b border-[#315de8]/15">
                             <h3 className="text-lg font-bold tracking-tight text-[#182b51]">
                                 The daily breakdown
                             </h3>
