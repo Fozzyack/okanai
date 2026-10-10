@@ -346,7 +346,7 @@ const Summary = (props: SummaryProps) => {
                         An estimate based on your entered rates. Public-holiday
                         rates replace other rates.{" "}
                         {props.settings.breaksOnlyDeductBasePay
-                            ? "Break cost uses your base rate only, deducted from the full shift’s pay and capped at that pay. Hour breakdowns still exclude breaks. "
+                            ? "Breaks deduct normal-rate hours first: weekday base pay, weekend pay, or holiday pay, then overtime if needed. Hour breakdowns reflect these deductions. "
                             : "Breaks are unpaid and subtracted before applying pay tiers. "}
                         Normal hours include the first weekend tier and all
                         public-holiday hours; the remaining paid hours are

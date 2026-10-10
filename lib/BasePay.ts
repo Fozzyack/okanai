@@ -1,8 +1,8 @@
-/** Checks for a positive hourly rate with at most two decimal places. */
+/** Checks for a positive hourly rate with any number of decimal places. */
 export const isValidBasePay = (pay: string): boolean => {
     const trimmedPay = pay.trim();
 
-    if (!/^(?:\d+(?:\.\d{1,2})?|\.\d{1,2})$/.test(trimmedPay)) {
+    if (!/^(?:\d+(?:\.\d+)?|\.\d+)$/.test(trimmedPay)) {
         return false;
     }
 
@@ -14,7 +14,7 @@ export const isValidBasePay = (pay: string): boolean => {
 export const parseBasePay = (pay: string): number => {
     if (!isValidBasePay(pay)) {
         throw new RangeError(
-            "Base pay must be a positive number with at most two decimal places.",
+            "Base pay must be a positive number.",
         );
     }
 

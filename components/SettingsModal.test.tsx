@@ -16,7 +16,8 @@ test("break deduction setting renders as an unchecked checkbox by default", () =
     assert.ok(input);
     assert.ok(input.includes('type="checkbox"'));
     assert.ok(!input.includes("checked"));
-    assert.ok(html.includes("Breaks only deduct base pay"));
+    assert.ok(html.includes("Deduct breaks from normal-rate hours first"));
+    assert.ok(html.includes("weekend normal-rate hours, or holiday hours first"));
 });
 
 test("break deduction checkbox reflects the saved setting", () => {

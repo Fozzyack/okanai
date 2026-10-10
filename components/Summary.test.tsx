@@ -64,5 +64,17 @@ test("summary reflects base-only break deductions", () => {
     const html = renderToStaticMarkup(<Summary weeklyHours={week} basePay="20" settings={{ ...settings, breaksOnlyDeductBasePay: true }} onStartAgain={() => {}} />);
     assert.ok(html.includes("$240.00"));
     assert.ok(html.includes("$20.00"));
-    assert.ok(html.includes("Break cost uses your base rate only"));
+    assert.ok(html.includes("Breaks deduct normal-rate hours first"));
+    assert.match(html, /Normal hours<\/dt><dd[^>]*>7h<\/dd>/);
+    assert.match(html, /Overtime hours<\/dt><dd[^>]*>3h<\/dd>/);
+});
+
+test("summary shows weekend and holiday break deductions at their applicable rates", () => {
+    const week = emptyWeek();
+    week[5] = { start: 540, end: 1200, break_time: 60, is_public_holiday: false };
+    week[6] = { ...week[5], is_public_holiday: true };
+    const html = renderToStaticMarkup(<Summary weeklyHours={week} basePay="20" settings={{ ...settings, publicHolidayBonus: 2.5, breaksOnlyDeductBasePay: true }} onStartAgain={() => {}} />);
+    for (const amount of ["$880.00", "$380.00", "$500.00", "$30.00", "$50.00"]) {
+        assert.ok(html.includes(amount), `Missing ${amount}`);
+    }
 });

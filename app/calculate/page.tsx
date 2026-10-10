@@ -30,7 +30,7 @@ export default function CalculatePage() {
 
     const [publicHolidayBonus, setPublicHolidayBonus] = useState<number>(2);
     const [breaksOnlyDeductBasePay, setBreaksOnlyDeductBasePay] =
-        useState(false);
+        useState(true);
 
     const settings: PaySettings = {
         bonusPay1,

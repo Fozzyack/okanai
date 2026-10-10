@@ -49,10 +49,12 @@ test("help matches skip, break, and holiday behavior", () => {
     assert.ok(!text.includes("regular 1× hours first"));
 });
 
-test("help explains enabled base-only break deductions", () => {
+test("help explains enabled normal-rate-first break deductions", () => {
     const text = helpText({ ...settings, breaksOnlyDeductBasePay: true });
-    assert.ok(text.includes("Breaks only deduct base pay is on"));
-    assert.ok(text.includes("deduct break hours × your base hourly rate"));
+    assert.ok(text.includes("Normal-rate-first break deductions are on"));
+    assert.ok(text.includes("Breaks deduct weekday base-rate hours first"));
+    assert.ok(text.includes("public-holiday hours at the holiday rate"));
+    assert.ok(text.includes("weekend hours at the normal weekend rate"));
     assert.ok(text.includes("up to 6 shift hours per day"));
     assert.ok(!text.includes("Breaks only deduct base pay is off"));
 });

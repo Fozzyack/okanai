@@ -162,9 +162,9 @@ const SettingsModal = ({ values, onSave }: SettingsModalProps) => {
                                 className="mt-0.5 h-5 w-5 shrink-0 cursor-pointer accent-[#315de8]"
                             />
                             <span>
-                                <span className="block text-sm font-semibold">Breaks only deduct base pay</span>
+                                <span className="block text-sm font-semibold">Deduct breaks from normal-rate hours first</span>
                                 <span id="settings-break-rule-description" className="mt-1 block text-xs leading-relaxed text-[#65718a]">
-                                    When checked, calculate the full shift’s pay, then deduct break hours at your base rate only.
+                                    When checked, deduct breaks from weekday base hours, weekend normal-rate hours, or holiday hours first, then overtime hours if needed.
                                     Otherwise, subtract breaks before applying overtime and special rates.
                                 </span>
                             </span>

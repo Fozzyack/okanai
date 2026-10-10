@@ -133,7 +133,7 @@ export default function CalculatorHelp({ settings }: { settings: PaySettings }) 
                             {settings.weekendBonus2}× and are shown as overtime.
                             Thresholds apply per day, not across the week.{" "}
                             {settings.breaksOnlyDeductBasePay
-                                ? "For pay calculations, thresholds use the full shift before the base-rate break deduction. Hour breakdowns still use hours excluding breaks."
+                                ? "Thresholds use the full shift, then breaks are removed from normal-rate hours first. Hour breakdowns reflect these deductions."
                                 : "Thresholds use paid hours after subtracting breaks."}
                         </p>
                     </section>
@@ -150,7 +150,7 @@ export default function CalculatorHelp({ settings }: { settings: PaySettings }) 
                         </p>
                         <p>
                             {settings.breaksOnlyDeductBasePay
-                                ? "Breaks only deduct base pay is on. Calculate the full shift’s pay using its applicable rates, then deduct break hours × your base hourly rate. Overtime, weekend, and holiday multipliers do not increase that deduction. The deduction is capped at the full shift’s pay so the result cannot be negative."
+                                ? "Normal-rate-first break deductions are on. Breaks deduct weekday base-rate hours first, weekend hours at the normal weekend rate, and public-holiday hours at the holiday rate. Public holidays override weekend rates. If a break exceeds the available normal hours, deduct the remaining break from the first overtime tier, then the second. An entire-shift break leaves no pay."
                                 : "Breaks only deduct base pay is off. Unpaid breaks are subtracted before applying daily overtime thresholds. Break cost is the difference between the same shift’s pay with and without its break, including any change in overtime tiers."}
                         </p>
                         <p>
