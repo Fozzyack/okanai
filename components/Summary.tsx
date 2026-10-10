@@ -73,21 +73,29 @@ const Summary = (props: SummaryProps) => {
             media.add(
                 "(prefers-reduced-motion: no-preference)",
                 () => {
-                    gsap.from("[data-summary-reveal]", {
-                        y: 18,
-                        opacity: 0,
-                        duration: 0.55,
-                        stagger: 0.1,
-                        delay: 0.2,
-                        ease: "power3.out",
-                        clearProps: "transform,opacity",
-                    });
+                    gsap.timeline({ delay: 0.2 })
+                        .from("[data-summary-reveal]", {
+                            y: 18,
+                            opacity: 0,
+                            duration: 0.55,
+                            stagger: 0.1,
+                            ease: "power3.out",
+                            clearProps: "transform,opacity",
+                        })
+                        .from("[data-earnings-bar]", {
+                            scaleY: 0,
+                            transformOrigin: "bottom center",
+                            duration: 0.7,
+                            stagger: 0.07,
+                            ease: "power3.out",
+                            clearProps: "transform,transformOrigin",
+                        }, 0.55);
                 },
                 sectionRef,
             );
             return () => media.revert();
         },
-        { scope: sectionRef },
+        { scope: sectionRef, dependencies: [summary.error === null], revertOnUpdate: true },
     );
 
     return (
@@ -167,6 +175,7 @@ const Summary = (props: SummaryProps) => {
                                             className="flex h-28 items-end overflow-hidden rounded-lg bg-[#edf2ff]"
                                         >
                                             <div
+                                                data-earnings-bar
                                                 className={`w-full rounded-lg transition-[height] duration-500 ${day.is_public_holiday ? "bg-[#efb2cd]" : "bg-[#315de8]"}`}
                                                 style={{
                                                     height:

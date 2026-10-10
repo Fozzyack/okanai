@@ -31,6 +31,8 @@ test("summary displays calculated totals, daily pay, and break costs", () => {
         assert.ok(html.includes(text), `Missing ${text}`);
     }
     assert.ok(html.includes('aria-label="Monday: $260.00"'));
+    assert.equal(html.match(/data-earnings-bar=/g)?.length, 7);
+    assert.ok(html.includes('style="height:100%"'));
     assert.match(html, /Normal hours<\/dt><dd[^>]*>8h<\/dd>/);
     assert.match(html, /Overtime hours<\/dt><dd[^>]*>3h<\/dd>/);
     assert.match(html, /Overtime hours<\/dt><dd[^>]*>5h<\/dd>/);
